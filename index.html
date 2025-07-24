@@ -130,35 +130,6 @@
             transform: translateY(-2px);
         }
 
-        .difficulty-selector {
-            display: flex;
-            gap: 5px;
-            margin-bottom: 15px;
-            justify-content: center;
-            flex-wrap: wrap;
-        }
-
-        .difficulty-btn {
-            padding: 8px 15px;
-            border: 2px solid #ddd;
-            background: white;
-            border-radius: 15px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            font-size: 0.9em;
-            font-weight: bold;
-        }
-
-        .difficulty-btn.active {
-            background: linear-gradient(135deg, #28a745, #20c997);
-            color: white;
-            border-color: #155724;
-        }
-
-        .difficulty-btn.easy { border-color: #28a745; color: #155724; }
-        .difficulty-btn.medium { border-color: #ffc107; color: #856404; }
-        .difficulty-btn.hard { border-color: #dc3545; color: #721c24; }
-
         .game-info {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
@@ -690,21 +661,12 @@
             </div>
         </div>
 
-        <div class="difficulty-selector">
-            <button class="difficulty-btn easy active" onclick="setDifficulty('easy')">Fácil</button>
-            <button class="difficulty-btn medium" onclick="setDifficulty('medium')">Medio</button>
-            <button class="difficulty-btn hard" onclick="setDifficulty('hard')">Difícil</button>
-        </div>
-
         <div class="game-info">
             <div class="info-card">
                 <div>Palabra <span class="info-value" id="wordNumber">1</span></div>
             </div>
             <div class="info-card">
                 <div>Pistas: <span class="info-value" id="hintsUsed">0</span>/<span id="maxHints">3</span></div>
-            </div>
-            <div class="info-card">
-                <div>Nivel: <span class="info-value" id="currentLevel">Fácil</span></div>
             </div>
             <div class="info-card">
                 <div>Racha: <span class="info-value" id="currentStreak">0</span></div>
@@ -785,59 +747,58 @@
     </div>
 
     <script>
-        // Base de datos de palabras por regiones y dificultad
-        const wordDatabase = {
-            easy: {
-                paisa: [
-                    { word: "AREPA", hint: "Pan de maíz típico, se come con todo", category: "COMIDA PAISA" },
-                    { word: "PARCE", hint: "Amigo, compañero, hermano del alma", category: "JERGA PAISA" },
-                    { word: "QUIUBO", hint: "¿Qué hubo? Saludo típico paisa", category: "JERGA PAISA" },
-                    { word: "FRIJOL", hint: "Legumbre infaltable en la bandeja paisa", category: "COMIDA PAISA" },
-                    { word: "PAISA", hint: "Gentilicio de Antioquia y el Eje Cafetero", category: "CULTURA PAISA" }
-                ],
-                costeno: [
-                    { word: "COSTENO", hint: "Persona nacida en la costa caribeña", category: "CULTURA COSTEÑA" },
-                    { word: "CUMBIA", hint: "Ritmo musical tradicional del Caribe", category: "MÚSICA COSTEÑA" },
-                    { word: "BOLLO", hint: "Masa de maíz cocida envuelta en hoja", category: "COMIDA COSTEÑA" },
-                    { word: "GAITA", hint: "Instrumento musical típico costeño", category: "MÚSICA COSTEÑA" },
-                    { word: "MERENGUE", hint: "Ritmo musical alegre del Caribe", category: "MÚSICA COSTEÑA" }
-                ],
-                bogotano: [
-                    { word: "ROLO", hint: "Persona nacida en Bogotá", category: "JERGA BOGOTANA" },
-                    { word: "TINTO", hint: "Café negro, bebida sagrada bogotana", category: "BEBIDAS BOGOTANAS" },
-                    { word: "AJIACO", hint: "Sopa típica de Bogotá con pollo y papas", category: "COMIDA BOGOTANA" },
-                    { word: "CHANGUA", hint: "Sopa de leche con huevo", category: "COMIDA BOGOTANA" },
-                    { word: "PANELA", hint: "Azúcar morena en bloque", category: "INGREDIENTES BOGOTANOS" }
-                ],
-                caleno: [
-                    { word: "CALENO", hint: "Persona nacida en Cali", category: "CULTURA CALEÑA" },
-                    { word: "SALSA", hint: "Género musical y baile típico de Cali", category: "MÚSICA CALEÑA" },
-                    { word: "LULADA", hint: "Bebida refrescante con lulo y hielo", category: "BEBIDAS CALEÑAS" },
-                    { word: "CHULETA", hint: "Carne de cerdo típica valluna", category: "COMIDA CALEÑA" },
-                    { word: "PANDEBONO", hint: "Pan dulce hecho con almidón de yuca", category: "COMIDA CALEÑA" }
-                ]
-            },
-            medium: [
-                { word: "BANDEJA", hint: "Plato típico paisa con frijoles, arroz y más", category: "COMIDA PAISA" },
-                { word: "VALLENATO", hint: "Género musical típico de la costa", category: "MÚSICA COSTEÑA" },
-                { word: "TAMALES", hint: "Masa rellena envuelta en hoja de plátano", category: "COMIDA BOGOTANA" },
-                { word: "CHAMPUS", hint: "Bebida dulce con maíz y frutas", category: "BEBIDAS CALEÑAS" },
-                { word: "SANCOCHO", hint: "Sopa con carnes, verduras y yuca", category: "COMIDA COSTEÑA" },
-                { word: "CHICHARRON", hint: "Carne de cerdo frita, crujiente", category: "COMIDA PAISA" },
-                { word: "AGUARDIENTE", hint: "Licor anisado típico de Colombia", category: "BEBIDAS PAISAS" },
-                { word: "EMPANADA", hint: "Masa frita rellena de carne o pollo", category: "COMIDA CALEÑA" },
-                { word: "FRITANGA", hint: "Variedad de frituras típicas", category: "COMIDA BOGOTANA" }
-            ],
-            hard: [
-                { word: "MAMAGALLISMO", hint: "Expresión para algo increíble", category: "JERGA COSTEÑA" },
-                { word: "CHICHARRON", hint: "Carne de cerdo crujiente, esencial paisa", category: "COMIDA PAISA" },
-                { word: "MAZAMORRA", hint: "Postre cremoso hecho con maíz", category: "POSTRES BOGOTANOS" },
-                { word: "ABORRAJADO", hint: "Plátano maduro con queso, empanizado", category: "COMIDA CALEÑA" },
-                { word: "BOCACHICO", hint: "Pez del río, también nombre cariñoso", category: "FAUNA COSTEÑA" },
-                { word: "ALMOJABANA", hint: "Pan de queso típico del desayuno", category: "COMIDA BOGOTANA" },
-                { word: "MANJARBLANCO", hint: "Dulce cremoso típico del Valle", category: "POSTRES CALEÑOS" }
-            ]
-        };
+        // Base de datos unificada de palabras mezcladas
+        const wordDatabase = [
+            // Palabras fáciles de todas las regiones
+            { word: "AREPA", hint: "Pan de maíz típico, se come con todo", category: "COMIDA PAISA" },
+            { word: "PARCE", hint: "Amigo, compañero, hermano del alma", category: "JERGA PAISA" },
+            { word: "QUIUBO", hint: "¿Qué hubo? Saludo típico paisa", category: "JERGA PAISA" },
+            { word: "FRIJOL", hint: "Legumbre infaltable en la bandeja paisa", category: "COMIDA PAISA" },
+            { word: "PAISA", hint: "Gentilicio de Antioquia y el Eje Cafetero", category: "CULTURA PAISA" },
+            { word: "COSTENO", hint: "Persona nacida en la costa caribeña", category: "CULTURA COSTEÑA" },
+            { word: "CUMBIA", hint: "Ritmo musical tradicional del Caribe", category: "MÚSICA COSTEÑA" },
+            { word: "BOLLO", hint: "Masa de maíz cocida envuelta en hoja", category: "COMIDA COSTEÑA" },
+            { word: "GAITA", hint: "Instrumento musical típico costeño", category: "MÚSICA COSTEÑA" },
+            { word: "MERENGUE", hint: "Ritmo musical alegre del Caribe", category: "MÚSICA COSTEÑA" },
+            { word: "ROLO", hint: "Persona nacida en Bogotá", category: "JERGA BOGOTANA" },
+            { word: "TINTO", hint: "Café negro, bebida sagrada bogotana", category: "BEBIDAS BOGOTANAS" },
+            { word: "AJIACO", hint: "Sopa típica de Bogotá con pollo y papas", category: "COMIDA BOGOTANA" },
+            { word: "CHANGUA", hint: "Sopa de leche con huevo", category: "COMIDA BOGOTANA" },
+            { word: "PANELA", hint: "Azúcar morena en bloque", category: "INGREDIENTES BOGOTANOS" },
+            { word: "CALENO", hint: "Persona nacida en Cali", category: "CULTURA CALEÑA" },
+            { word: "SALSA", hint: "Género musical y baile típico de Cali", category: "MÚSICA CALEÑA" },
+            { word: "LULADA", hint: "Bebida refrescante con lulo y hielo", category: "BEBIDAS CALEÑAS" },
+            { word: "CHULETA", hint: "Carne de cerdo típica valluna", category: "COMIDA CALEÑA" },
+            { word: "PANDEBONO", hint: "Pan dulce hecho con almidón de yuca", category: "COMIDA CALEÑA" },
+
+            // Palabras medianas de todas las regiones
+            { word: "BANDEJA", hint: "Plato típico paisa con frijoles, arroz y más", category: "COMIDA PAISA" },
+            { word: "VALLENATO", hint: "Género musical típico de la costa", category: "MÚSICA COSTEÑA" },
+            { word: "TAMALES", hint: "Masa rellena envuelta en hoja de plátano", category: "COMIDA BOGOTANA" },
+            { word: "CHAMPUS", hint: "Bebida dulce con maíz y frutas", category: "BEBIDAS CALEÑAS" },
+            { word: "SANCOCHO", hint: "Sopa con carnes, verduras y yuca", category: "COMIDA COSTEÑA" },
+            { word: "CHICHARRON", hint: "Carne de cerdo frita, crujiente", category: "COMIDA PAISA" },
+            { word: "AGUARDIENTE", hint: "Licor anisado típico de Colombia", category: "BEBIDAS PAISAS" },
+            { word: "EMPANADA", hint: "Masa frita rellena de carne o pollo", category: "COMIDA CALEÑA" },
+            { word: "FRITANGA", hint: "Variedad de frituras típicas", category: "COMIDA BOGOTANA" },
+            { word: "MORCILLA", hint: "Embutido de sangre, típico paisa", category: "COMIDA PAISA" },
+            { word: "PATACON", hint: "Plátano verde aplastado y frito", category: "COMIDA COSTEÑA" },
+            { word: "LECHONA", hint: "Cerdo relleno, típico de Tolima", category: "COMIDA TOLIMENSE" },
+            { word: "MAMONA", hint: "Carne de ternera a la llanera", category: "COMIDA LLANERA" },
+            { word: "CASABE", hint: "Torta de yuca brava típica costeña", category: "COMIDA COSTEÑA" },
+
+            // Palabras difíciles de todas las regiones
+            { word: "MAMAGALLISMO", hint: "Expresión para algo increíble", category: "JERGA COSTEÑA" },
+            { word: "MAZAMORRA", hint: "Postre cremoso hecho con maíz", category: "POSTRES BOGOTANOS" },
+            { word: "ABORRAJADO", hint: "Plátano maduro con queso, empanizado", category: "COMIDA CALEÑA" },
+            { word: "BOCACHICO", hint: "Pez del río, también nombre cariñoso", category: "FAUNA COSTEÑA" },
+            { word: "ALMOJABANA", hint: "Pan de queso típico del desayuno", category: "COMIDA BOGOTANA" },
+            { word: "MANJARBLANCO", hint: "Dulce cremoso típico del Valle", category: "POSTRES CALEÑOS" },
+            { word: "CUCHUFLETA", hint: "Golosina de coco rallado", category: "DULCES COSTEÑOS" },
+            { word: "MONDONGO", hint: "Sopa de tripas y verduras", category: "COMIDA BOGOTANA" },
+            { word: "BUTIFARRRA", hint: "Embutido típico de la costa", category: "COMIDA COSTEÑA" },
+            { word: "CHOLAO", hint: "Raspado con frutas y leche condensada", category: "POSTRES CALEÑOS" }
+        ];
 
         // Variables del juego
         let currentWordData = {};
@@ -853,7 +814,6 @@
         let wordNumber = 1;
         let hintsUsed = 0;
         let revealedPositions = [];
-        let currentDifficulty = 'easy';
         let maxHints = 3;
         let soundEnabled = true;
         let regionsMastered = 0;
@@ -916,18 +876,8 @@
         }
 
         function selectRandomWord() {
-            let wordList;
-            
-            if (currentDifficulty === 'easy') {
-                const regions = Object.keys(wordDatabase.easy);
-                const randomRegion = regions[Math.floor(Math.random() * regions.length)];
-                wordList = wordDatabase.easy[randomRegion];
-            } else {
-                wordList = wordDatabase[currentDifficulty];
-            }
-            
-            const randomIndex = Math.floor(Math.random() * wordList.length);
-            currentWordData = wordList[randomIndex];
+            const randomIndex = Math.floor(Math.random() * wordDatabase.length);
+            currentWordData = wordDatabase[randomIndex];
             currentWord = currentWordData.word;
             
             // Agregar badge de región
@@ -943,6 +893,8 @@
             if (category.includes('COSTEÑ')) return '<span class="region-badge">🏖️ COSTEÑO</span>';
             if (category.includes('BOGOTANA') || category.includes('BOGOTANO')) return '<span class="region-badge">🏛️ BOGOTANO</span>';
             if (category.includes('CALEÑ')) return '<span class="region-badge">🕺 CALEÑO</span>';
+            if (category.includes('TOLIMENSE')) return '<span class="region-badge">🌾 TOLIMENSE</span>';
+            if (category.includes('LLANERA')) return '<span class="region-badge">🐎 LLANERO</span>';
             return '';
         }
 
@@ -956,9 +908,9 @@
             // Crear las letras disponibles
             availableLetters = [...currentWord];
             
-            // Agregar letras extra según dificultad
-            const extraCount = currentDifficulty === 'easy' ? 4 : currentDifficulty === 'medium' ? 6 : 8;
-            const extraLetters = ['A', 'E', 'I', 'O', 'U', 'S', 'N', 'R', 'T', 'L', 'D', 'M', 'C', 'P', 'B', 'G', 'H', 'V', 'Y', 'Z'];
+            // Agregar letras extra basado en la longitud de la palabra
+            const extraCount = Math.max(4, Math.floor(currentWord.length * 0.8));
+            const extraLetters = ['A', 'E', 'I', 'O', 'U', 'S', 'N', 'R', 'T', 'L', 'D', 'M', 'C', 'P', 'B', 'G', 'H', 'V', 'Y', 'Z', 'F', 'J', 'K', 'Q', 'W', 'X'];
             const randomExtras = extraLetters.filter(letter => !availableLetters.includes(letter))
                                            .sort(() => 0.5 - Math.random())
                                            .slice(0, extraCount);
@@ -1057,8 +1009,8 @@
                 wordsCompleted++;
                 currentStreak++;
                 
-                // Calcular arepas ganadas
-                let baseArepas = currentDifficulty === 'easy' ? 5 : currentDifficulty === 'medium' ? 8 : 12;
+                // Calcular arepas ganadas basado en la longitud de la palabra
+                let baseArepas = Math.max(5, currentWord.length);
                 if (hintsUsed === 0) {
                     baseArepas += 5;
                     perfectWords++;
@@ -1171,6 +1123,16 @@
                         const slot = document.getElementById(`slot-${i}`);
                         slot.textContent = currentWord[i];
                         slot.classList.add('magic');
+                        
+                        // Marcar letra como usada
+                        const letterIndex = availableLetters.findIndex((letter, index) => 
+                            letter === currentWord[i] && !usedLetters.includes(index)
+                        );
+                        if (letterIndex !== -1) {
+                            usedLetters.push(letterIndex);
+                            const letterOption = document.getElementById(`letter-${letterIndex}`);
+                            if (letterOption) letterOption.classList.add('used');
+                        }
                     }
                 }
                 playSound('🌟');
@@ -1192,31 +1154,21 @@
                     const slot = document.getElementById(`slot-${pos}`);
                     slot.textContent = currentWord[pos];
                     slot.classList.add('magic');
+                    
+                    // Marcar letra como usada
+                    const letterIndex = availableLetters.findIndex((letter, index) => 
+                        letter === currentWord[pos] && !usedLetters.includes(index)
+                    );
+                    if (letterIndex !== -1) {
+                        usedLetters.push(letterIndex);
+                        const letterOption = document.getElementById(`letter-${letterIndex}`);
+                        if (letterOption) letterOption.classList.add('used');
+                    }
                 });
                 
                 playSound('✨');
                 showMessage(`¡Magia! ${lettersToFill} letras reveladas (-${magicCost} arepas)`, 'magic');
             }
-            
-            updateUI();
-        }
-
-        function setDifficulty(difficulty) {
-            currentDifficulty = difficulty;
-            
-            // Actualizar UI de dificultad
-            document.querySelectorAll('.difficulty-btn').forEach(btn => btn.classList.remove('active'));
-            document.querySelector(`.difficulty-btn.${difficulty}`).classList.add('active');
-            
-            // Actualizar maxHints según dificultad
-            const baseHints = { easy: 3, medium: 2, hard: 1 };
-            maxHints = baseHints[difficulty];
-            if (shopItems.find(item => item.id === 'extraHints').owned) {
-                maxHints += 2;
-            }
-            
-            document.getElementById('currentLevel').textContent = 
-                difficulty === 'easy' ? 'Fácil' : difficulty === 'medium' ? 'Medio' : 'Difícil';
             
             updateUI();
         }
@@ -1335,6 +1287,8 @@
             if (category.includes('COSTEÑ')) return 'costeno';
             if (category.includes('BOGOTANA') || category.includes('BOGOTANO')) return 'bogotano';
             if (category.includes('CALEÑ')) return 'caleno';
+            if (category.includes('TOLIMENSE')) return 'tolimense';
+            if (category.includes('LLANERA')) return 'llanero';
             return 'general';
         }
 
@@ -1465,4 +1419,4 @@
         initializeGame();
     </script>
 </body>
-</html>
+    </html>
