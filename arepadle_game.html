@@ -1,0 +1,1468 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Arepadle Pro - El Juego Más Bacano de Colombia</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #FFD700, #FF6B35, #004E98);
+            min-height: 100vh;
+            padding: 10px;
+            overflow-x: hidden;
+        }
+
+        .game-container {
+            max-width: 700px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 20px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .game-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 5px;
+            background: linear-gradient(90deg, #FFD700, #FF6B35, #004E98);
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .title {
+            font-size: 2.2em;
+            color: #004E98;
+            margin-bottom: 5px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+            animation: bounce 2s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+            40% { transform: translateY(-8px); }
+            60% { transform: translateY(-4px); }
+        }
+
+        .subtitle {
+            color: #FF6B35;
+            font-size: 1em;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+
+        .top-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .arepa-counter {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: linear-gradient(135deg, #FFD700, #FFF8DC);
+            padding: 12px 15px;
+            border-radius: 20px;
+            border: 2px solid #FF6B35;
+            animation: glow 2s ease-in-out infinite alternate;
+        }
+
+        @keyframes glow {
+            from { box-shadow: 0 0 5px rgba(255, 107, 53, 0.5); }
+            to { box-shadow: 0 0 15px rgba(255, 107, 53, 0.8); }
+        }
+
+        .arepa-icon {
+            font-size: 1.5em;
+            animation: rotate 3s linear infinite;
+        }
+
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .arepa-count {
+            font-size: 1.3em;
+            font-weight: bold;
+            color: #004E98;
+        }
+
+        .controls {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .control-btn {
+            background: linear-gradient(135deg, #004E98, #0066CC);
+            color: white;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 15px;
+            font-size: 0.9em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .control-btn:hover {
+            background: linear-gradient(135deg, #0066CC, #004E98);
+            transform: translateY(-2px);
+        }
+
+        .difficulty-selector {
+            display: flex;
+            gap: 5px;
+            margin-bottom: 15px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .difficulty-btn {
+            padding: 8px 15px;
+            border: 2px solid #ddd;
+            background: white;
+            border-radius: 15px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.9em;
+            font-weight: bold;
+        }
+
+        .difficulty-btn.active {
+            background: linear-gradient(135deg, #28a745, #20c997);
+            color: white;
+            border-color: #155724;
+        }
+
+        .difficulty-btn.easy { border-color: #28a745; color: #155724; }
+        .difficulty-btn.medium { border-color: #ffc107; color: #856404; }
+        .difficulty-btn.hard { border-color: #dc3545; color: #721c24; }
+
+        .game-info {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 10px;
+            margin-bottom: 15px;
+            font-size: 0.85em;
+        }
+
+        .info-card {
+            background: #f8f9fa;
+            padding: 8px;
+            border-radius: 8px;
+            text-align: center;
+            border: 1px solid #e9ecef;
+        }
+
+        .info-value {
+            font-weight: bold;
+            color: #FF6B35;
+        }
+
+        .word-hint {
+            background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+            padding: 15px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            border-left: 4px solid #FF6B35;
+            text-align: center;
+        }
+
+        .hint-category {
+            font-size: 0.8em;
+            color: #666;
+            margin-bottom: 5px;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+
+        .region-badge {
+            display: inline-block;
+            background: linear-gradient(135deg, #17a2b8, #138496);
+            color: white;
+            padding: 3px 8px;
+            border-radius: 10px;
+            font-size: 0.7em;
+            margin-left: 8px;
+        }
+
+        .hint-text {
+            font-size: 1.1em;
+            color: #333;
+            font-style: italic;
+            line-height: 1.3;
+        }
+
+        .word-display {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 8px;
+            margin: 25px 0;
+            flex-wrap: wrap;
+        }
+
+        .letter-slot {
+            width: 45px;
+            height: 45px;
+            border: 3px solid #ddd;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.6em;
+            font-weight: bold;
+            text-transform: uppercase;
+            background: white;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .letter-slot.filled {
+            background: linear-gradient(135deg, #28a745, #20c997);
+            color: white;
+            border-color: #155724;
+            animation: fillSuccess 0.5s ease;
+        }
+
+        .letter-slot.revealed {
+            background: linear-gradient(135deg, #17a2b8, #138496);
+            color: white;
+            border-color: #0c5460;
+        }
+
+        .letter-slot.magic {
+            background: linear-gradient(135deg, #6f42c1, #5a2a87);
+            color: white;
+            border-color: #432054;
+            animation: magicPulse 1s ease infinite;
+        }
+
+        @keyframes fillSuccess {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.15); }
+            100% { transform: scale(1); }
+        }
+
+        @keyframes magicPulse {
+            0%, 100% { box-shadow: 0 0 5px rgba(111, 66, 193, 0.5); }
+            50% { box-shadow: 0 0 20px rgba(111, 66, 193, 1); }
+        }
+
+        .available-letters {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            border: 2px solid #e9ecef;
+        }
+
+        .letters-title {
+            text-align: center;
+            color: #004E98;
+            font-weight: bold;
+            margin-bottom: 12px;
+            font-size: 0.9em;
+        }
+
+        .letters-grid {
+            display: flex;
+            justify-content: center;
+            gap: 6px;
+            flex-wrap: wrap;
+        }
+
+        .letter-option {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, #FFD700, #FFF8DC);
+            border: 2px solid #FF6B35;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.3em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+        }
+
+        .letter-option:hover {
+            background: linear-gradient(135deg, #FF6B35, #FF8C42);
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .letter-option.used {
+            background: #6c757d;
+            color: white;
+            border-color: #495057;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .game-buttons {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            margin: 20px 0;
+            flex-wrap: wrap;
+        }
+
+        .game-btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 20px;
+            font-size: 0.9em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            position: relative;
+        }
+
+        .check-btn {
+            background: linear-gradient(135deg, #28a745, #20c997);
+            color: white;
+        }
+
+        .hint-btn {
+            background: linear-gradient(135deg, #17a2b8, #138496);
+            color: white;
+        }
+
+        .magic-btn {
+            background: linear-gradient(135deg, #6f42c1, #5a2a87);
+            color: white;
+            animation: magicShimmer 2s ease-in-out infinite;
+        }
+
+        @keyframes magicShimmer {
+            0%, 100% { box-shadow: 0 0 10px rgba(111, 66, 193, 0.5); }
+            50% { box-shadow: 0 0 25px rgba(111, 66, 193, 1); }
+        }
+
+        .game-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+        }
+
+        .game-btn:disabled {
+            background: #6c757d !important;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            animation: none;
+        }
+
+        .btn-cost {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            background: #FF6B35;
+            color: white;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            font-size: 0.7em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .message {
+            text-align: center;
+            padding: 12px;
+            border-radius: 10px;
+            margin-bottom: 15px;
+            font-weight: bold;
+            animation: slideIn 0.5s ease;
+            font-size: 0.9em;
+        }
+
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .message.success {
+            background: rgba(40, 167, 69, 0.1);
+            color: #155724;
+            border: 2px solid rgba(40, 167, 69, 0.3);
+        }
+
+        .message.error {
+            background: rgba(220, 53, 69, 0.1);
+            color: #721c24;
+            border: 2px solid rgba(220, 53, 69, 0.3);
+        }
+
+        .message.info {
+            background: rgba(0, 123, 255, 0.1);
+            color: #004085;
+            border: 2px solid rgba(0, 123, 255, 0.3);
+        }
+
+        .message.magic {
+            background: rgba(111, 66, 193, 0.1);
+            color: #432054;
+            border: 2px solid rgba(111, 66, 193, 0.3);
+        }
+
+        .new-word-btn {
+            width: 100%;
+            background: linear-gradient(135deg, #FF6B35, #FF8C42);
+            color: white;
+            border: none;
+            padding: 12px;
+            border-radius: 20px;
+            font-size: 1em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            margin-top: 15px;
+        }
+
+        .new-word-btn:hover {
+            background: linear-gradient(135deg, #FF8C42, #FF6B35);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            animation: fadeIn 0.3s ease;
+        }
+
+        .modal-content {
+            background-color: white;
+            margin: 5% auto;
+            padding: 25px;
+            border-radius: 20px;
+            width: 90%;
+            max-width: 500px;
+            max-height: 80vh;
+            overflow-y: auto;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+            position: relative;
+        }
+
+        .modal-header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .modal-title {
+            font-size: 1.8em;
+            color: #004E98;
+            margin-bottom: 10px;
+        }
+
+        .close {
+            position: absolute;
+            right: 15px;
+            top: 15px;
+            font-size: 1.5em;
+            font-weight: bold;
+            cursor: pointer;
+            color: #666;
+        }
+
+        .close:hover {
+            color: #FF6B35;
+        }
+
+        .shop-grid {
+            display: grid;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .shop-item {
+            background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+            padding: 15px;
+            border-radius: 12px;
+            border: 2px solid #e9ecef;
+            transition: all 0.3s ease;
+        }
+
+        .shop-item:hover {
+            border-color: #FF6B35;
+            transform: translateY(-2px);
+        }
+
+        .shop-item-title {
+            font-weight: bold;
+            color: #004E98;
+            margin-bottom: 8px;
+        }
+
+        .shop-item-desc {
+            color: #666;
+            margin-bottom: 10px;
+            font-size: 0.9em;
+        }
+
+        .shop-item-price {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .price {
+            font-weight: bold;
+            color: #FF6B35;
+        }
+
+        .buy-btn {
+            background: linear-gradient(135deg, #28a745, #20c997);
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 15px;
+            cursor: pointer;
+            font-size: 0.8em;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+
+        .buy-btn:hover {
+            background: linear-gradient(135deg, #20c997, #28a745);
+            transform: translateY(-1px);
+        }
+
+        .buy-btn:disabled {
+            background: #6c757d;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .stat-card {
+            background: #f8f9fa;
+            padding: 10px;
+            border-radius: 8px;
+            text-align: center;
+            border: 1px solid #e9ecef;
+        }
+
+        .stat-number {
+            font-size: 1.2em;
+            font-weight: bold;
+            color: #FF6B35;
+        }
+
+        .stat-label {
+            font-size: 0.75em;
+            color: #666;
+            margin-top: 3px;
+        }
+
+        .arepa-animation {
+            position: fixed;
+            font-size: 2em;
+            pointer-events: none;
+            z-index: 1000;
+            animation: flyUp 2s ease-out forwards;
+        }
+
+        @keyframes flyUp {
+            0% {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+            100% {
+                opacity: 0;
+                transform: translateY(-100px) scale(1.5);
+            }
+        }
+
+        .sound-effect {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 3em;
+            pointer-events: none;
+            z-index: 1000;
+            animation: soundPop 1s ease-out forwards;
+        }
+
+        @keyframes soundPop {
+            0% { opacity: 0; transform: translate(-50%, -50%) scale(0); }
+            50% { opacity: 1; transform: translate(-50%, -50%) scale(1.2); }
+            100% { opacity: 0; transform: translate(-50%, -50%) scale(1.5); }
+        }
+
+        .colombian-flag {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            width: 45px;
+            height: 27px;
+            border-radius: 4px;
+            overflow: hidden;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        .flag-yellow { background: #FFD700; height: 50%; }
+        .flag-blue { background: #004E98; height: 25%; }
+        .flag-red { background: #FF0000; height: 25%; }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @media (max-width: 600px) {
+            .game-container { padding: 15px; }
+            .title { font-size: 1.8em; }
+            .top-bar { flex-direction: column; }
+            .word-display { gap: 5px; }
+            .letter-slot { width: 35px; height: 35px; font-size: 1.3em; }
+            .letter-option { width: 32px; height: 32px; font-size: 1.1em; }
+        }
+    </style>
+</head>
+<body>
+    <div class="game-container">
+        <div class="colombian-flag">
+            <div class="flag-yellow"></div>
+            <div class="flag-blue"></div>
+            <div class="flag-red"></div>
+        </div>
+
+        <div class="header">
+            <h1 class="title">🫓 Arepadle Pro</h1>
+            <p class="subtitle">¡El juego más bacano de Colombia!</p>
+        </div>
+
+        <div class="top-bar">
+            <div class="arepa-counter">
+                <span class="arepa-icon">🫓</span>
+                <span class="arepa-count" id="arepaCount">50</span>
+                <span style="color: #004E98; font-weight: bold; font-size: 0.9em;">arepas</span>
+            </div>
+            
+            <div class="controls">
+                <button class="control-btn" onclick="openShop()">🛒 Tienda</button>
+                <button class="control-btn" onclick="showStats()">📊 Stats</button>
+                <button class="control-btn" onclick="toggleSound()" id="soundBtn">🔊 Sonido</button>
+            </div>
+        </div>
+
+        <div class="difficulty-selector">
+            <button class="difficulty-btn easy active" onclick="setDifficulty('easy')">Fácil</button>
+            <button class="difficulty-btn medium" onclick="setDifficulty('medium')">Medio</button>
+            <button class="difficulty-btn hard" onclick="setDifficulty('hard')">Difícil</button>
+        </div>
+
+        <div class="game-info">
+            <div class="info-card">
+                <div>Palabra <span class="info-value" id="wordNumber">1</span></div>
+            </div>
+            <div class="info-card">
+                <div>Pistas: <span class="info-value" id="hintsUsed">0</span>/<span id="maxHints">3</span></div>
+            </div>
+            <div class="info-card">
+                <div>Nivel: <span class="info-value" id="currentLevel">Fácil</span></div>
+            </div>
+            <div class="info-card">
+                <div>Racha: <span class="info-value" id="currentStreak">0</span></div>
+            </div>
+        </div>
+
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-number" id="wordsCompleted">0</div>
+                <div class="stat-label">Completadas</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="perfectWords">0</div>
+                <div class="stat-label">Perfectas</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="regionsMastered">0</div>
+                <div class="stat-label">Regiones</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="magicUsed">0</div>
+                <div class="stat-label">Magias</div>
+            </div>
+        </div>
+
+        <div class="word-hint">
+            <div class="hint-category" id="wordCategory">JERGA COLOMBIANA</div>
+            <div class="hint-text" id="wordHint">Completa la palabra usando las letras disponibles</div>
+        </div>
+
+        <div class="word-display" id="wordDisplay"></div>
+
+        <div id="message" class="message" style="display: none;"></div>
+
+        <div class="available-letters">
+            <div class="letters-title">Letras disponibles:</div>
+            <div class="letters-grid" id="lettersGrid"></div>
+        </div>
+
+        <div class="game-buttons">
+            <button class="game-btn check-btn" onclick="checkWord()">✓ Verificar</button>
+            <button class="game-btn hint-btn" id="hintBtn" onclick="giveHint()">
+                💡 Pista
+                <span class="btn-cost" id="hintCost">5</span>
+            </button>
+            <button class="game-btn magic-btn" id="magicBtn" onclick="useMagic()">
+                ✨ Magia
+                <span class="btn-cost" id="magicCost">15</span>
+            </button>
+        </div>
+
+        <button class="new-word-btn" id="newWordBtn" onclick="nextWord()" style="display: none;">
+            ¡Nueva Palabra!
+        </button>
+    </div>
+
+    <!-- Modal Tienda -->
+    <div id="shopModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <span class="close" onclick="closeShop()">&times;</span>
+                <h2 class="modal-title">🛒 Tienda de Arepas</h2>
+                <p>Personaliza tu experiencia y compra mejoras</p>
+            </div>
+            <div class="shop-grid" id="shopItems"></div>
+        </div>
+    </div>
+
+    <!-- Modal Estadísticas -->
+    <div id="statsModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <span class="close" onclick="closeStats()">&times;</span>
+                <h2 class="modal-title">📊 Tus Estadísticas</h2>
+            </div>
+            <div id="detailedStats"></div>
+        </div>
+    </div>
+
+    <script>
+        // Base de datos de palabras por regiones y dificultad
+        const wordDatabase = {
+            easy: {
+                paisa: [
+                    { word: "AREPA", hint: "Pan de maíz típico, se come con todo", category: "COMIDA PAISA" },
+                    { word: "PARCE", hint: "Amigo, compañero, hermano del alma", category: "JERGA PAISA" },
+                    { word: "QUIUBO", hint: "¿Qué hubo? Saludo típico paisa", category: "JERGA PAISA" },
+                    { word: "FRIJOL", hint: "Legumbre infaltable en la bandeja paisa", category: "COMIDA PAISA" },
+                    { word: "PAISA", hint: "Gentilicio de Antioquia y el Eje Cafetero", category: "CULTURA PAISA" }
+                ],
+                costeno: [
+                    { word: "COSTENO", hint: "Persona nacida en la costa caribeña", category: "CULTURA COSTEÑA" },
+                    { word: "CUMBIA", hint: "Ritmo musical tradicional del Caribe", category: "MÚSICA COSTEÑA" },
+                    { word: "BOLLO", hint: "Masa de maíz cocida envuelta en hoja", category: "COMIDA COSTEÑA" },
+                    { word: "GAITA", hint: "Instrumento musical típico costeño", category: "MÚSICA COSTEÑA" },
+                    { word: "MERENGUE", hint: "Ritmo musical alegre del Caribe", category: "MÚSICA COSTEÑA" }
+                ],
+                bogotano: [
+                    { word: "ROLO", hint: "Persona nacida en Bogotá", category: "JERGA BOGOTANA" },
+                    { word: "TINTO", hint: "Café negro, bebida sagrada bogotana", category: "BEBIDAS BOGOTANAS" },
+                    { word: "AJIACO", hint: "Sopa típica de Bogotá con pollo y papas", category: "COMIDA BOGOTANA" },
+                    { word: "CHANGUA", hint: "Sopa de leche con huevo", category: "COMIDA BOGOTANA" },
+                    { word: "PANELA", hint: "Azúcar morena en bloque", category: "INGREDIENTES BOGOTANOS" }
+                ],
+                caleno: [
+                    { word: "CALENO", hint: "Persona nacida en Cali", category: "CULTURA CALEÑA" },
+                    { word: "SALSA", hint: "Género musical y baile típico de Cali", category: "MÚSICA CALEÑA" },
+                    { word: "LULADA", hint: "Bebida refrescante con lulo y hielo", category: "BEBIDAS CALEÑAS" },
+                    { word: "CHULETA", hint: "Carne de cerdo típica valluna", category: "COMIDA CALEÑA" },
+                    { word: "PANDEBONO", hint: "Pan dulce hecho con almidón de yuca", category: "COMIDA CALEÑA" }
+                ]
+            },
+            medium: [
+                { word: "BANDEJA", hint: "Plato típico paisa con frijoles, arroz y más", category: "COMIDA PAISA" },
+                { word: "VALLENATO", hint: "Género musical típico de la costa", category: "MÚSICA COSTEÑA" },
+                { word: "TAMALES", hint: "Masa rellena envuelta en hoja de plátano", category: "COMIDA BOGOTANA" },
+                { word: "CHAMPUS", hint: "Bebida dulce con maíz y frutas", category: "BEBIDAS CALEÑAS" },
+                { word: "SANCOCHO", hint: "Sopa con carnes, verduras y yuca", category: "COMIDA COSTEÑA" },
+                { word: "CHICHARRON", hint: "Carne de cerdo frita, crujiente", category: "COMIDA PAISA" },
+                { word: "AGUARDIENTE", hint: "Licor anisado típico de Colombia", category: "BEBIDAS PAISAS" },
+                { word: "EMPANADA", hint: "Masa frita rellena de carne o pollo", category: "COMIDA CALEÑA" },
+                { word: "FRITANGA", hint: "Variedad de frituras típicas", category: "COMIDA BOGOTANA" }
+            ],
+            hard: [
+                { word: "MAMAGALLISMO", hint: "Expresión para algo increíble", category: "JERGA COSTEÑA" },
+                { word: "CHICHARRON", hint: "Carne de cerdo crujiente, esencial paisa", category: "COMIDA PAISA" },
+                { word: "MAZAMORRA", hint: "Postre cremoso hecho con maíz", category: "POSTRES BOGOTANOS" },
+                { word: "ABORRAJADO", hint: "Plátano maduro con queso, empanizado", category: "COMIDA CALEÑA" },
+                { word: "BOCACHICO", hint: "Pez del río, también nombre cariñoso", category: "FAUNA COSTEÑA" },
+                { word: "ALMOJABANA", hint: "Pan de queso típico del desayuno", category: "COMIDA BOGOTANA" },
+                { word: "MANJARBLANCO", hint: "Dulce cremoso típico del Valle", category: "POSTRES CALEÑOS" }
+            ]
+        };
+
+        // Variables del juego
+        let currentWordData = {};
+        let currentWord = "";
+        let playerWord = [];
+        let availableLetters = [];
+        let usedLetters = [];
+        let gameEnded = false;
+        let totalArepas = 50;
+        let wordsCompleted = 0;
+        let perfectWords = 0;
+        let currentStreak = 0;
+        let wordNumber = 1;
+        let hintsUsed = 0;
+        let revealedPositions = [];
+        let currentDifficulty = 'easy';
+        let maxHints = 3;
+        let soundEnabled = true;
+        let regionsMastered = 0;
+        let magicUsed = 0;
+        let completedRegions = new Set();
+
+        // Costos de la tienda
+        let hintCost = 5;
+        let magicCost = 15;
+
+        // Items de la tienda
+        const shopItems = [
+            {
+                id: 'extraHints',
+                title: '🎯 Pistas Extra',
+                description: 'Aumenta el máximo de pistas por palabra a 5',
+                price: 50,
+                owned: false,
+                effect: () => { maxHints = 5; updateUI(); }
+            },
+            {
+                id: 'cheapHints',
+                title: '💰 Pistas Baratas',
+                description: 'Reduce el costo de las pistas a 3 arepas',
+                price: 80,
+                owned: false,
+                effect: () => { hintCost = 3; updateHintCost(); }
+            },
+            {
+                id: 'cheapMagic',
+                title: '✨ Magia Económica',
+                description: 'Reduce el costo de la magia a 10 arepas',
+                price: 100,
+                owned: false,
+                effect: () => { magicCost = 10; updateMagicCost(); }
+            },
+            {
+                id: 'doubleArepas',
+                title: '🫓 Arepas Dobles',
+                description: 'Duplica las arepas ganadas por palabra completada',
+                price: 150,
+                owned: false,
+                effect: () => { }
+            },
+            {
+                id: 'superMagic',
+                title: '🌟 Súper Magia',
+                description: 'La magia completa toda la palabra',
+                price: 200,
+                owned: false,
+                effect: () => { }
+            }
+        ];
+
+        function initializeGame() {
+            selectRandomWord();
+            loadStats();
+            updateUI();
+            createShopItems();
+        }
+
+        function selectRandomWord() {
+            let wordList;
+            
+            if (currentDifficulty === 'easy') {
+                const regions = Object.keys(wordDatabase.easy);
+                const randomRegion = regions[Math.floor(Math.random() * regions.length)];
+                wordList = wordDatabase.easy[randomRegion];
+            } else {
+                wordList = wordDatabase[currentDifficulty];
+            }
+            
+            const randomIndex = Math.floor(Math.random() * wordList.length);
+            currentWordData = wordList[randomIndex];
+            currentWord = currentWordData.word;
+            
+            // Agregar badge de región
+            const regionBadge = getRegionBadge(currentWordData.category);
+            document.getElementById('wordCategory').innerHTML = currentWordData.category + regionBadge;
+            document.getElementById('wordHint').textContent = currentWordData.hint;
+            
+            setupWord();
+        }
+
+        function getRegionBadge(category) {
+            if (category.includes('PAISA')) return '<span class="region-badge">🏔️ PAISA</span>';
+            if (category.includes('COSTEÑ')) return '<span class="region-badge">🏖️ COSTEÑO</span>';
+            if (category.includes('BOGOTANA') || category.includes('BOGOTANO')) return '<span class="region-badge">🏛️ BOGOTANO</span>';
+            if (category.includes('CALEÑ')) return '<span class="region-badge">🕺 CALEÑO</span>';
+            return '';
+        }
+
+        function setupWord() {
+            playerWord = new Array(currentWord.length).fill('');
+            usedLetters = [];
+            hintsUsed = 0;
+            revealedPositions = [];
+            gameEnded = false;
+            
+            // Crear las letras disponibles
+            availableLetters = [...currentWord];
+            
+            // Agregar letras extra según dificultad
+            const extraCount = currentDifficulty === 'easy' ? 4 : currentDifficulty === 'medium' ? 6 : 8;
+            const extraLetters = ['A', 'E', 'I', 'O', 'U', 'S', 'N', 'R', 'T', 'L', 'D', 'M', 'C', 'P', 'B', 'G', 'H', 'V', 'Y', 'Z'];
+            const randomExtras = extraLetters.filter(letter => !availableLetters.includes(letter))
+                                           .sort(() => 0.5 - Math.random())
+                                           .slice(0, extraCount);
+            
+            availableLetters = [...availableLetters, ...randomExtras];
+            availableLetters = availableLetters.sort(() => 0.5 - Math.random());
+            
+            createWordDisplay();
+            createLettersGrid();
+            updateUI();
+        }
+
+        function createWordDisplay() {
+            const wordDisplay = document.getElementById('wordDisplay');
+            wordDisplay.innerHTML = '';
+            
+            for (let i = 0; i < currentWord.length; i++) {
+                const slot = document.createElement('div');
+                slot.className = 'letter-slot';
+                slot.id = `slot-${i}`;
+                slot.onclick = () => removeLetterFromSlot(i);
+                wordDisplay.appendChild(slot);
+            }
+        }
+
+        function createLettersGrid() {
+            const lettersGrid = document.getElementById('lettersGrid');
+            lettersGrid.innerHTML = '';
+            
+            availableLetters.forEach((letter, index) => {
+                const letterDiv = document.createElement('div');
+                letterDiv.className = 'letter-option';
+                letterDiv.textContent = letter;
+                letterDiv.id = `letter-${index}`;
+                letterDiv.onclick = () => selectLetter(letter, index);
+                lettersGrid.appendChild(letterDiv);
+            });
+        }
+
+        function selectLetter(letter, index) {
+            if (gameEnded || usedLetters.includes(index)) return;
+            
+            const emptySlotIndex = playerWord.findIndex(slot => slot === '');
+            if (emptySlotIndex === -1) {
+                showMessage('¡Ya completaste todas las letras! Usa "Verificar" para comprobar.', 'info');
+                return;
+            }
+            
+            playerWord[emptySlotIndex] = letter;
+            usedLetters.push(index);
+            
+            const slot = document.getElementById(`slot-${emptySlotIndex}`);
+            slot.textContent = letter;
+            slot.classList.add('filled');
+            
+            const letterOption = document.getElementById(`letter-${index}`);
+            letterOption.classList.add('used');
+            
+            playSound('📝');
+        }
+
+        function removeLetterFromSlot(slotIndex) {
+            if (gameEnded || playerWord[slotIndex] === '' || revealedPositions.includes(slotIndex)) return;
+            
+            const letter = playerWord[slotIndex];
+            playerWord[slotIndex] = '';
+            
+            const letterIndex = usedLetters.find(index => 
+                availableLetters[index] === letter
+            );
+            
+            if (letterIndex !== undefined) {
+                usedLetters = usedLetters.filter(index => index !== letterIndex);
+                const letterOption = document.getElementById(`letter-${letterIndex}`);
+                if (letterOption) letterOption.classList.remove('used');
+            }
+            
+            const slot = document.getElementById(`slot-${slotIndex}`);
+            slot.textContent = '';
+            slot.classList.remove('filled');
+        }
+
+        function checkWord() {
+            if (gameEnded) return;
+            
+            const guessedWord = playerWord.join('');
+            
+            if (guessedWord.length !== currentWord.length) {
+                showMessage('¡Completa todas las letras antes de verificar!', 'error');
+                playSound('❌');
+                return;
+            }
+            
+            if (guessedWord === currentWord) {
+                gameEnded = true;
+                wordsCompleted++;
+                currentStreak++;
+                
+                // Calcular arepas ganadas
+                let baseArepas = currentDifficulty === 'easy' ? 5 : currentDifficulty === 'medium' ? 8 : 12;
+                if (hintsUsed === 0) {
+                    baseArepas += 5;
+                    perfectWords++;
+                }
+                
+                // Aplicar mejora de arepas dobles
+                if (shopItems.find(item => item.id === 'doubleArepas').owned) {
+                    baseArepas *= 2;
+                }
+                
+                earnArepas(baseArepas);
+                
+                const region = getRegionFromCategory(currentWordData.category);
+                completedRegions.add(region);
+                regionsMastered = completedRegions.size;
+                
+                playSound('🎉');
+                
+                if (hintsUsed === 0) {
+                    showMessage(`¡Qué chimba! Palabra perfecta. +${baseArepas} arepas 🫓`, 'success');
+                } else {
+                    showMessage(`¡Bacano! Completaste la palabra. +${baseArepas} arepas 🫓`, 'success');
+                }
+                
+                document.getElementById('newWordBtn').style.display = 'block';
+                disableGameButtons();
+                
+            } else {
+                currentStreak = 0;
+                showMessage(`¡Casi! La palabra correcta era "${currentWord}". +1 arepa por intentar 🫓`, 'error');
+                earnArepas(1);
+                gameEnded = true;
+                document.getElementById('newWordBtn').style.display = 'block';
+                disableGameButtons();
+                
+                playSound('😔');
+                
+                // Mostrar la palabra correcta
+                for (let i = 0; i < currentWord.length; i++) {
+                    const slot = document.getElementById(`slot-${i}`);
+                    slot.textContent = currentWord[i];
+                    if (playerWord[i] === currentWord[i]) {
+                        slot.classList.add('filled');
+                    } else {
+                        slot.classList.add('revealed');
+                    }
+                }
+            }
+            
+            updateStats();
+        }
+
+        function giveHint() {
+            if (gameEnded || hintsUsed >= maxHints || totalArepas < hintCost) return;
+            
+            const emptyPositions = [];
+            for (let i = 0; i < currentWord.length; i++) {
+                if (playerWord[i] === '' && !revealedPositions.includes(i)) {
+                    emptyPositions.push(i);
+                }
+            }
+            
+            if (emptyPositions.length === 0) {
+                showMessage('¡No hay más pistas disponibles!', 'info');
+                return;
+            }
+            
+            totalArepas -= hintCost;
+            
+            const randomPos = emptyPositions[Math.floor(Math.random() * emptyPositions.length)];
+            const correctLetter = currentWord[randomPos];
+            
+            playerWord[randomPos] = correctLetter;
+            revealedPositions.push(randomPos);
+            
+            const letterIndex = availableLetters.findIndex((letter, index) => 
+                letter === correctLetter && !usedLetters.includes(index)
+            );
+            
+            if (letterIndex !== -1) {
+                usedLetters.push(letterIndex);
+                const letterOption = document.getElementById(`letter-${letterIndex}`);
+                if (letterOption) letterOption.classList.add('used');
+            }
+            
+            const slot = document.getElementById(`slot-${randomPos}`);
+            slot.textContent = correctLetter;
+            slot.classList.add('revealed');
+            
+            hintsUsed++;
+            updateUI();
+            
+            playSound('💡');
+            showMessage(`¡Pista! La letra "${correctLetter}" va en esa posición (-${hintCost} arepas)`, 'info');
+        }
+
+        function useMagic() {
+            if (gameEnded || totalArepas < magicCost) return;
+            
+            totalArepas -= magicCost;
+            magicUsed++;
+            
+            const superMagic = shopItems.find(item => item.id === 'superMagic').owned;
+            
+            if (superMagic) {
+                // Completar toda la palabra
+                for (let i = 0; i < currentWord.length; i++) {
+                    if (playerWord[i] === '') {
+                        playerWord[i] = currentWord[i];
+                        const slot = document.getElementById(`slot-${i}`);
+                        slot.textContent = currentWord[i];
+                        slot.classList.add('magic');
+                    }
+                }
+                playSound('🌟');
+                showMessage(`¡Súper Magia! Palabra completada (-${magicCost} arepas)`, 'magic');
+            } else {
+                // Completar 2-3 letras aleatorias
+                const emptyPositions = [];
+                for (let i = 0; i < currentWord.length; i++) {
+                    if (playerWord[i] === '') {
+                        emptyPositions.push(i);
+                    }
+                }
+                
+                const lettersToFill = Math.min(3, emptyPositions.length);
+                const positionsToFill = emptyPositions.sort(() => 0.5 - Math.random()).slice(0, lettersToFill);
+                
+                positionsToFill.forEach(pos => {
+                    playerWord[pos] = currentWord[pos];
+                    const slot = document.getElementById(`slot-${pos}`);
+                    slot.textContent = currentWord[pos];
+                    slot.classList.add('magic');
+                });
+                
+                playSound('✨');
+                showMessage(`¡Magia! ${lettersToFill} letras reveladas (-${magicCost} arepas)`, 'magic');
+            }
+            
+            updateUI();
+        }
+
+        function setDifficulty(difficulty) {
+            currentDifficulty = difficulty;
+            
+            // Actualizar UI de dificultad
+            document.querySelectorAll('.difficulty-btn').forEach(btn => btn.classList.remove('active'));
+            document.querySelector(`.difficulty-btn.${difficulty}`).classList.add('active');
+            
+            // Actualizar maxHints según dificultad
+            const baseHints = { easy: 3, medium: 2, hard: 1 };
+            maxHints = baseHints[difficulty];
+            if (shopItems.find(item => item.id === 'extraHints').owned) {
+                maxHints += 2;
+            }
+            
+            document.getElementById('currentLevel').textContent = 
+                difficulty === 'easy' ? 'Fácil' : difficulty === 'medium' ? 'Medio' : 'Difícil';
+            
+            updateUI();
+        }
+
+        function playSound(emoji) {
+            if (!soundEnabled) return;
+            
+            const soundEffect = document.createElement('div');
+            soundEffect.className = 'sound-effect';
+            soundEffect.textContent = emoji;
+            document.body.appendChild(soundEffect);
+            
+            setTimeout(() => {
+                if (document.body.contains(soundEffect)) {
+                    document.body.removeChild(soundEffect);
+                }
+            }, 1000);
+        }
+
+        function toggleSound() {
+            soundEnabled = !soundEnabled;
+            document.getElementById('soundBtn').textContent = soundEnabled ? '🔊 Sonido' : '🔇 Silencio';
+        }
+
+        function earnArepas(amount) {
+            totalArepas += amount;
+            document.getElementById('arepaCount').textContent = totalArepas;
+            
+            // Animación de arepas volando
+            for (let i = 0; i < Math.min(amount, 8); i++) {
+                setTimeout(() => {
+                    createFlyingArepa();
+                }, i * 150);
+            }
+        }
+
+        function createFlyingArepa() {
+            const arepa = document.createElement('div');
+            arepa.className = 'arepa-animation';
+            arepa.textContent = '🫓';
+            arepa.style.left = Math.random() * window.innerWidth + 'px';
+            arepa.style.top = window.innerHeight - 100 + 'px';
+            document.body.appendChild(arepa);
+            
+            setTimeout(() => {
+                if (document.body.contains(arepa)) {
+                    document.body.removeChild(arepa);
+                }
+            }, 2000);
+        }
+
+        function showMessage(text, type) {
+            const message = document.getElementById('message');
+            message.textContent = text;
+            message.className = `message ${type}`;
+            message.style.display = 'block';
+            
+            setTimeout(() => {
+                message.style.display = 'none';
+            }, 4000);
+        }
+
+        function nextWord() {
+            wordNumber++;
+            selectRandomWord();
+            document.getElementById('newWordBtn').style.display = 'none';
+            enableGameButtons();
+            updateUI();
+        }
+
+        function disableGameButtons() {
+            document.getElementById('hintBtn').disabled = true;
+            document.getElementById('magicBtn').disabled = true;
+        }
+
+        function enableGameButtons() {
+            updateButtonStates();
+        }
+
+        function updateUI() {
+            document.getElementById('wordNumber').textContent = wordNumber;
+            document.getElementById('hintsUsed').textContent = hintsUsed;
+            document.getElementById('maxHints').textContent = maxHints;
+            document.getElementById('arepaCount').textContent = totalArepas;
+            
+            updateStats();
+            updateButtonStates();
+        }
+
+        function updateButtonStates() {
+            const hintBtn = document.getElementById('hintBtn');
+            const magicBtn = document.getElementById('magicBtn');
+            
+            hintBtn.disabled = gameEnded || hintsUsed >= maxHints || totalArepas < hintCost;
+            magicBtn.disabled = gameEnded || totalArepas < magicCost;
+        }
+
+        function updateHintCost() {
+            document.getElementById('hintCost').textContent = hintCost;
+        }
+
+        function updateMagicCost() {
+            document.getElementById('magicCost').textContent = magicCost;
+        }
+
+        function updateStats() {
+            document.getElementById('wordsCompleted').textContent = wordsCompleted;
+            document.getElementById('perfectWords').textContent = perfectWords;
+            document.getElementById('currentStreak').textContent = currentStreak;
+            document.getElementById('regionsMastered').textContent = regionsMastered;
+            document.getElementById('magicUsed').textContent = magicUsed;
+        }
+
+        function getRegionFromCategory(category) {
+            if (category.includes('PAISA')) return 'paisa';
+            if (category.includes('COSTEÑ')) return 'costeno';
+            if (category.includes('BOGOTANA') || category.includes('BOGOTANO')) return 'bogotano';
+            if (category.includes('CALEÑ')) return 'caleno';
+            return 'general';
+        }
+
+        // Funciones de la tienda
+        function openShop() {
+            document.getElementById('shopModal').style.display = 'block';
+        }
+
+        function closeShop() {
+            document.getElementById('shopModal').style.display = 'none';
+        }
+
+        function createShopItems() {
+            const shopContainer = document.getElementById('shopItems');
+            shopContainer.innerHTML = '';
+            
+            shopItems.forEach(item => {
+                const itemDiv = document.createElement('div');
+                itemDiv.className = 'shop-item';
+                itemDiv.innerHTML = `
+                    <div class="shop-item-title">${item.title}</div>
+                    <div class="shop-item-desc">${item.description}</div>
+                    <div class="shop-item-price">
+                        <span class="price">${item.price} 🫓</span>
+                        <button class="buy-btn" onclick="buyItem('${item.id}')" 
+                                ${item.owned || totalArepas < item.price ? 'disabled' : ''}>
+                            ${item.owned ? 'Comprado' : totalArepas < item.price ? 'Sin arepas' : 'Comprar'}
+                        </button>
+                    </div>
+                `;
+                shopContainer.appendChild(itemDiv);
+            });
+        }
+
+        function buyItem(itemId) {
+            const item = shopItems.find(i => i.id === itemId);
+            if (!item || item.owned || totalArepas < item.price) return;
+            
+            totalArepas -= item.price;
+            item.owned = true;
+            item.effect();
+            
+            playSound('🛒');
+            showMessage(`¡Comprado! ${item.title}`, 'success');
+            
+            createShopItems();
+            updateUI();
+        }
+
+        // Funciones de estadísticas
+        function showStats() {
+            const statsContainer = document.getElementById('detailedStats');
+            const winRate = wordsCompleted > 0 ? Math.round((perfectWords / wordsCompleted) * 100) : 0;
+            
+            statsContainer.innerHTML = `
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-number">${wordsCompleted}</div>
+                        <div class="stat-label">Palabras Completadas</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number">${perfectWords}</div>
+                        <div class="stat-label">Palabras Perfectas</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number">${winRate}%</div>
+                        <div class="stat-label">Tasa de Perfección</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number">${currentStreak}</div>
+                        <div class="stat-label">Racha Actual</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number">${regionsMastered}</div>
+                        <div class="stat-label">Regiones Dominadas</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number">${magicUsed}</div>
+                        <div class="stat-label">Magias Usadas</div>
+                    </div>
+                </div>
+                <h3 style="margin: 20px 0 10px; color: #004E98;">🏆 Logros</h3>
+                <div style="display: grid; gap: 10px;">
+                    ${generateAchievements()}
+                </div>
+            `;
+            
+            document.getElementById('statsModal').style.display = 'block';
+        }
+
+        function closeStats() {
+            document.getElementById('statsModal').style.display = 'none';
+        }
+
+        function generateAchievements() {
+            const achievements = [];
+            
+            if (wordsCompleted >= 10) achievements.push('🎯 Completaste 10 palabras');
+            if (perfectWords >= 5) achievements.push('💎 5 palabras perfectas');
+            if (currentStreak >= 5) achievements.push('🔥 Racha de 5 palabras');
+            if (regionsMastered >= 3) achievements.push('🗺️ Dominaste 3 regiones');
+            if (totalArepas >= 100) achievements.push('🫓 Acumulaste 100 arepas');
+            
+            return achievements.length > 0 ? 
+                achievements.map(a => `<div style="padding: 8px; background: #f8f9fa; border-radius: 5px;">${a}</div>`).join('') :
+                '<div style="color: #666; font-style: italic;">¡Sigue jugando para desbloquear logros!</div>';
+        }
+
+        function loadStats() {
+            document.getElementById('arepaCount').textContent = totalArepas;
+            updateStats();
+        }
+
+        // Cerrar modales al hacer clic fuera
+        window.onclick = function(event) {
+            const shopModal = document.getElementById('shopModal');
+            const statsModal = document.getElementById('statsModal');
+            
+            if (event.target == shopModal) {
+                closeShop();
+            }
+            if (event.target == statsModal) {
+                closeStats();
+            }
+        }
+
+        // Inicializar el juego
+        initializeGame();
+    </script>
+</body>
+</html>
