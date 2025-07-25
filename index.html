@@ -3,20 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Arepadle Pro - El juego de palabras más divertido de Colombia con temática de arepas y cultura colombiana">
     <title>Arepadle Pro - El Juego Más Bacano de Colombia</title>
     <style>
-        :root {
-            --gold: #FFD700;
-            --orange: #FF6B35;
-            --blue: #004E98;
-            --success: #28a745;
-            --info: #17a2b8;
-            --warning: #ffc107;
-            --danger: #dc3545;
-            --purple: #6f42c1;
-        }
-
         * {
             margin: 0;
             padding: 0;
@@ -25,11 +13,9 @@
 
         body {
             font-family: 'Arial', sans-serif;
-            background: linear-gradient(135deg, var(--gold), var(--orange), var(--blue));
+            background: linear-gradient(135deg, #FFD700, #FF6B35, #004E98);
             min-height: 100vh;
             padding: 10px;
-            line-height: 1.6;
-            color: #333;
         }
 
         .game-container {
@@ -40,7 +26,6 @@
             padding: 20px;
             box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
             position: relative;
-            overflow: hidden;
         }
 
         .game-container::before {
@@ -50,7 +35,7 @@
             left: 0;
             right: 0;
             height: 5px;
-            background: linear-gradient(90deg, var(--gold), var(--orange), var(--blue));
+            background: linear-gradient(90deg, #FFD700, #FF6B35, #004E98);
         }
 
         .header {
@@ -59,14 +44,14 @@
         }
 
         .title {
-            font-size: clamp(1.8rem, 5vw, 2.2rem);
-            color: var(--blue);
+            font-size: 2.2em;
+            color: #004E98;
             margin-bottom: 5px;
             text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
         }
 
         .subtitle {
-            color: var(--orange);
+            color: #FF6B35;
             font-size: 1em;
             font-weight: bold;
             margin-bottom: 15px;
@@ -85,16 +70,16 @@
             display: flex;
             align-items: center;
             gap: 8px;
-            background: linear-gradient(135deg, var(--gold), #FFF8DC);
+            background: linear-gradient(135deg, #FFD700, #FFF8DC);
             padding: 12px 15px;
             border-radius: 20px;
-            border: 2px solid var(--orange);
+            border: 2px solid #FF6B35;
         }
 
         .arepa-count {
             font-size: 1.3em;
             font-weight: bold;
-            color: var(--blue);
+            color: #004E98;
         }
 
         .game-info {
@@ -115,7 +100,7 @@
 
         .info-value {
             font-weight: bold;
-            color: var(--orange);
+            color: #FF6B35;
         }
 
         .word-hint {
@@ -123,7 +108,7 @@
             padding: 15px;
             border-radius: 12px;
             margin-bottom: 20px;
-            border-left: 4px solid var(--orange);
+            border-left: 4px solid #FF6B35;
             text-align: center;
         }
 
@@ -165,23 +150,22 @@
             background: white;
             cursor: pointer;
             transition: all 0.3s ease;
-            user-select: none;
         }
 
         .letter-slot.filled {
-            background: linear-gradient(135deg, var(--success), #20c997);
+            background: linear-gradient(135deg, #28a745, #20c997);
             color: white;
             border-color: #155724;
         }
 
         .letter-slot.revealed {
-            background: linear-gradient(135deg, var(--info), #138496);
+            background: linear-gradient(135deg, #17a2b8, #138496);
             color: white;
             border-color: #0c5460;
         }
 
         .letter-slot.magic {
-            background: linear-gradient(135deg, var(--purple), #5a2a87);
+            background: linear-gradient(135deg, #6f42c1, #5a2a87);
             color: white;
             border-color: #432054;
         }
@@ -196,7 +180,7 @@
 
         .letters-title {
             text-align: center;
-            color: var(--blue);
+            color: #004E98;
             font-weight: bold;
             margin-bottom: 12px;
             font-size: 0.9em;
@@ -212,8 +196,8 @@
         .letter-option {
             width: 45px;
             height: 45px;
-            background: linear-gradient(135deg, var(--gold), #FFF8DC);
-            border: 2px solid var(--orange);
+            background: linear-gradient(135deg, #FFD700, #FFF8DC);
+            border: 2px solid #FF6B35;
             border-radius: 6px;
             display: flex;
             align-items: center;
@@ -223,18 +207,13 @@
             cursor: pointer;
             transition: all 0.3s ease;
             text-transform: uppercase;
-            user-select: none;
         }
 
         .letter-option:hover {
-            background: linear-gradient(135deg, var(--orange), #FF8C42);
+            background: linear-gradient(135deg, #FF6B35, #FF8C42);
             color: white;
             transform: translateY(-2px);
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-        }
-
-        .letter-option:focus {
-            outline: 2px solid var(--blue);
         }
 
         .letter-option.used {
@@ -264,21 +243,20 @@
             transition: all 0.3s ease;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
             position: relative;
-            min-width: 160px;
         }
 
         .check-btn {
-            background: linear-gradient(135deg, var(--success), #20c997);
+            background: linear-gradient(135deg, #28a745, #20c997);
             color: white;
         }
 
         .hint-btn {
-            background: linear-gradient(135deg, var(--info), #138496);
+            background: linear-gradient(135deg, #17a2b8, #138496);
             color: white;
         }
 
         .magic-btn {
-            background: linear-gradient(135deg, var(--purple), #5a2a87);
+            background: linear-gradient(135deg, #6f42c1, #5a2a87);
             color: white;
         }
 
@@ -291,14 +269,13 @@
             background: #6c757d !important;
             cursor: not-allowed;
             transform: none;
-            opacity: 0.7;
         }
 
         .btn-cost {
             position: absolute;
             top: -8px;
             right: -8px;
-            background: var(--orange);
+            background: #FF6B35;
             color: white;
             border-radius: 50%;
             width: 22px;
@@ -316,12 +293,6 @@
             margin-bottom: 15px;
             font-weight: bold;
             font-size: 1em;
-            opacity: 0;
-            transition: opacity 0.3s ease;
-        }
-
-        .message.show {
-            opacity: 1;
         }
 
         .message.success {
@@ -350,7 +321,7 @@
 
         .new-word-btn {
             width: 100%;
-            background: linear-gradient(135deg, var(--orange), #FF8C42);
+            background: linear-gradient(135deg, #FF6B35, #FF8C42);
             color: white;
             border: none;
             padding: 15px;
@@ -364,7 +335,7 @@
         }
 
         .new-word-btn:hover {
-            background: linear-gradient(135deg, #FF8C42, var(--orange));
+            background: linear-gradient(135deg, #FF8C42, #FF6B35);
             transform: translateY(-2px);
         }
 
@@ -386,7 +357,7 @@
         .stat-number {
             font-size: 1.3em;
             font-weight: bold;
-            color: var(--orange);
+            color: #FF6B35;
         }
 
         .stat-label {
@@ -396,72 +367,25 @@
         }
 
         @media (max-width: 600px) {
-            .game-container { 
-                padding: 15px; 
-                border-radius: 15px;
-            }
-            
-            .title { 
-                font-size: 1.8em; 
-            }
-            
-            .letter-slot { 
-                width: 40px; 
-                height: 40px; 
-                font-size: 1.4em; 
-            }
-            
-            .letter-option { 
-                width: 35px; 
-                height: 35px; 
-                font-size: 1.2em; 
-            }
-            
-            .game-btn {
-                min-width: 120px;
-                padding: 10px 15px;
-                font-size: 0.9em;
-            }
-            
-            .new-word-btn {
-                padding: 12px;
-                font-size: 1em;
-            }
-        }
-
-        /* Animaciones */
-        @keyframes bounce {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-5px); }
-        }
-
-        .bounce {
-            animation: bounce 0.5s ease;
-        }
-
-        @keyframes pulse {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.05); }
-            100% { transform: scale(1); }
-        }
-
-        .pulse {
-            animation: pulse 0.5s ease;
+            .game-container { padding: 15px; }
+            .title { font-size: 1.8em; }
+            .letter-slot { width: 40px; height: 40px; font-size: 1.4em; }
+            .letter-option { width: 35px; height: 35px; font-size: 1.2em; }
         }
     </style>
 </head>
 <body>
     <div class="game-container">
         <div class="header">
-            <h1 class="title">🫓 Arepadle Pro</h1>
+            <h1 class="title"><span role="img" aria-label="Arepa">🫓</span> Arepadle Pro</h1>
             <p class="subtitle">¡El juego más bacano de Colombia!</p>
         </div>
 
         <div class="top-bar">
             <div class="arepa-counter">
-                <span aria-hidden="true" style="font-size: 1.5em;">🫓</span>
+                <span role="img" aria-label="Arepa" style="font-size: 1.5em;">🫓</span>
                 <span class="arepa-count" id="arepaCount">50</span>
-                <span style="color: var(--blue); font-weight: bold;">arepas</span>
+                <span style="color: #004E98; font-weight: bold;">arepas</span>
             </div>
         </div>
 
@@ -497,30 +421,28 @@
             <div class="hint-text" id="wordHint">Haz clic en las letras para formar la palabra</div>
         </div>
 
-        <div class="word-display" id="wordDisplay" role="region" aria-live="polite"></div>
+        <div class="word-display" id="wordDisplay"></div>
 
-        <div id="message" class="message" role="alert" aria-live="assertive"></div>
+        <div id="message" class="message" style="display: none;"></div>
 
         <div class="available-letters">
             <div class="letters-title">Letras disponibles (haz clic para usar):</div>
-            <div class="letters-grid" id="lettersGrid" role="group" aria-label="Letras disponibles"></div>
+            <div class="letters-grid" id="lettersGrid"></div>
         </div>
 
         <div class="game-buttons">
-            <button class="game-btn check-btn" id="checkBtn" onclick="checkWord()">
-                ✓ Verificar Palabra
-            </button>
-            <button class="game-btn hint-btn" id="hintBtn" onclick="giveHint()">
+            <button class="game-btn check-btn" onclick="checkWord()" aria-label="Verificar palabra">✓ Verificar Palabra</button>
+            <button class="game-btn hint-btn" onclick="giveHint()" aria-label="Usar pista (cuesta 5 arepas)">
                 💡 Pista
                 <span class="btn-cost">5</span>
             </button>
-            <button class="game-btn magic-btn" id="magicBtn" onclick="useMagic()">
+            <button class="game-btn magic-btn" onclick="useMagic()" aria-label="Usar magia (cuesta 15 arepas)">
                 ✨ Magia
                 <span class="btn-cost">15</span>
             </button>
         </div>
 
-        <button class="new-word-btn" id="newWordBtn" onclick="nextWord()" style="display: none;">
+        <button class="new-word-btn" id="newWordBtn" onclick="nextWord()" style="display: none;" aria-label="Obtener nueva palabra">
             🎯 ¡Nueva Palabra!
         </button>
     </div>
@@ -588,7 +510,7 @@
             { word: "OPITA", hint: "Persona del Huila", category: "CULTURA HUILENSE" },
             { word: "SANTANDER", hint: "Departamento del nororiente", category: "GEOGRAFÍA" },
             { word: "ANTIOQUIA", hint: "Departamento paisa", category: "GEOGRAFÍA" },
-            { word: "CUNDINAMARC", hint: "Departamento de Bogotá", category: "GEOGRAFÍA" },
+            { word: "CUNDINAMARCA", hint: "Departamento de Bogotá", category: "GEOGRAFÍA" },
 
             // MÚSICA Y BAILES
             { word: "SALSA", hint: "Género musical típico de Cali", category: "MÚSICA CALEÑA" },
@@ -669,72 +591,21 @@
         let hintsUsed = 0;
         let currentScore = 0;
 
+        // --------------------------
+        // FUNCIONES DE INICIALIZACIÓN
+        // --------------------------
+
         // Inicializar juego
         function initGame() {
             console.log("Iniciando juego...");
             selectNewWord();
             updateDisplay();
-            setupEventListeners();
-        }
-
-        // Configurar event listeners
-        function setupEventListeners() {
-            document.addEventListener('keydown', handleKeyPress);
-            
-            // Botones con IDs para mejor manejo
-            document.getElementById('checkBtn').addEventListener('click', checkWord);
-            document.getElementById('hintBtn').addEventListener('click', giveHint);
-            document.getElementById('magicBtn').addEventListener('click', useMagic);
-            document.getElementById('newWordBtn').addEventListener('click', nextWord);
-        }
-
-        // Manejar teclado
-        function handleKeyPress(e) {
-            if (gameEnded) return;
-            
-            // Permitir usar teclas de letras
-            if (e.key.length === 1 && e.key.match(/[a-z]/i)) {
-                const letter = e.key.toUpperCase();
-                const buttonIndex = availableLetters.indexOf(letter);
-                
-                if (buttonIndex !== -1) {
-                    const button = document.getElementById(`letter-${buttonIndex}`);
-                    if (!button.classList.contains('used')) {
-                        selectLetter(letter, buttonIndex);
-                        button.classList.add('bounce');
-                        setTimeout(() => button.classList.remove('bounce'), 500);
-                    }
-                }
-            }
-            
-            // Permitir borrar con Backspace
-            if (e.key === 'Backspace') {
-                const filledSlots = playerGuess.reduce((acc, val, idx) => {
-                    if (val !== "") acc.push(idx);
-                    return acc;
-                }, []);
-                
-                if (filledSlots.length > 0) {
-                    removeLetterFromSlot(filledSlots[filledSlots.length - 1]);
-                }
-            }
-            
-            // Permitir verificar con Enter
-            if (e.key === 'Enter') {
-                checkWord();
-            }
         }
 
         // Seleccionar nueva palabra
         function selectNewWord() {
-            // Filtrar palabras no usadas recientemente
-            const availableWords = wordDatabase.filter(word => 
-                !playerGuess.includes(word.word) || 
-                (wordsCompleted > 10 && Math.random() > 0.7)
-            );
-            
-            const randomIndex = Math.floor(Math.random() * availableWords.length);
-            const wordData = availableWords[randomIndex];
+            const randomIndex = Math.floor(Math.random() * wordDatabase.length);
+            const wordData = wordDatabase[randomIndex];
             
             currentWord = wordData.word;
             currentHint = wordData.hint;
@@ -773,16 +644,20 @@
             const filteredExtras = extraLetters.filter(letter => !availableLetters.includes(letter));
             
             // Mezclar y tomar algunas letras extra
-            for (let i = 0; i < numExtras && i < filteredExtras.length; i++) {
-                const randomIndex = Math.floor(Math.random() * filteredExtras.length);
-                availableLetters.push(filteredExtras.splice(randomIndex, 1)[0]);
-            }
+            const shuffledExtras = [...filteredExtras].sort(() => Math.random() - 0.5);
+            const selectedExtras = shuffledExtras.slice(0, Math.min(numExtras, shuffledExtras.length));
+            
+            availableLetters = [...availableLetters, ...selectedExtras];
             
             // Mezclar todas las letras
             availableLetters = availableLetters.sort(() => Math.random() - 0.5);
             
             console.log("Letras disponibles:", availableLetters);
         }
+
+        // --------------------------
+        // FUNCIONES DE INTERFAZ
+        // --------------------------
 
         // Crear casillas para la palabra
         function createWordSlots() {
@@ -793,14 +668,8 @@
                 const slot = document.createElement('div');
                 slot.className = 'letter-slot';
                 slot.id = `slot-${i}`;
-                slot.setAttribute('aria-label', `Espacio ${i + 1} para letra`);
-                slot.tabIndex = 0;
                 slot.onclick = () => removeLetterFromSlot(i);
-                slot.onkeydown = (e) => {
-                    if (e.key === 'Enter' || e.key === ' ') {
-                        removeLetterFromSlot(i);
-                    }
-                };
+                slot.setAttribute('aria-label', `Espacio para letra ${i+1}`);
                 wordDisplay.appendChild(slot);
             }
         }
@@ -815,240 +684,10 @@
                 button.className = 'letter-option';
                 button.textContent = letter;
                 button.id = `letter-${index}`;
+                button.onclick = () => selectLetter(letter, index);
                 button.setAttribute('aria-label', `Letra ${letter}`);
-                button.onclick = () => {
-                    selectLetter(letter, index);
-                    button.classList.add('bounce');
-                    setTimeout(() => button.classList.remove('bounce'), 500);
-                };
                 lettersGrid.appendChild(button);
             });
-        }
-
-        // Seleccionar una letra
-        function selectLetter(letter, buttonIndex) {
-            if (gameEnded) return;
-            
-            const button = document.getElementById(`letter-${buttonIndex}`);
-            if (button.classList.contains('used')) return;
-            
-            // Encontrar el primer slot vacío
-            const emptySlotIndex = playerGuess.findIndex(slot => slot === "");
-            if (emptySlotIndex === -1) {
-                showMessage('Ya completaste todas las letras. ¡Verifica tu respuesta!', 'info');
-                return;
-            }
-            
-            // Colocar la letra en el slot
-            playerGuess[emptySlotIndex] = letter;
-            const slot = document.getElementById(`slot-${emptySlotIndex}`);
-            slot.textContent = letter;
-            slot.classList.add('filled');
-            slot.classList.add('pulse');
-            setTimeout(() => slot.classList.remove('pulse'), 500);
-            
-            // Marcar botón como usado
-            button.classList.add('used');
-            
-            console.log("Letra seleccionada:", letter, "Progreso:", playerGuess);
-        }
-
-        // Remover letra de un slot
-        function removeLetterFromSlot(slotIndex) {
-            if (gameEnded || playerGuess[slotIndex] === "") return;
-            
-            const letter = playerGuess[slotIndex];
-            
-            // Limpiar el slot
-            playerGuess[slotIndex] = "";
-            const slot = document.getElementById(`slot-${slotIndex}`);
-            slot.textContent = "";
-            slot.classList.remove('filled', 'revealed', 'magic');
-            
-            // Reactivar el botón de la letra
-            const buttons = document.querySelectorAll('.letter-option');
-            buttons.forEach(button => {
-                if (button.textContent === letter && button.classList.contains('used')) {
-                    button.classList.remove('used');
-                    button.classList.add('pulse');
-                    setTimeout(() => button.classList.remove('pulse'), 500);
-                    return;
-                }
-            });
-            
-            console.log("Letra removida:", letter, "Progreso:", playerGuess);
-        }
-
-        // Verificar palabra
-        function checkWord() {
-            if (gameEnded) return;
-            
-            const guessedWord = playerGuess.join('');
-            
-            if (guessedWord.length !== currentWord.length) {
-                showMessage('¡Completa todas las letras antes de verificar!', 'error');
-                return;
-            }
-            
-            if (guessedWord === currentWord) {
-                // ¡Correcto!
-                gameEnded = true;
-                wordsCompleted++;
-                currentStreak++;
-                
-                let points = currentWord.length * 10;
-                if (hintsUsed === 0) {
-                    points += 50; // Bonus por no usar pistas
-                    perfectWords++;
-                    showMessage(`¡PERFECTO! +${points} puntos (sin pistas) 🎉`, 'success');
-                } else {
-                    showMessage(`¡CORRECTO! +${points} puntos 🎉`, 'success');
-                }
-                
-                currentScore += points;
-                totalArepas += Math.floor(points / 10);
-                
-                document.getElementById('newWordBtn').style.display = 'block';
-                
-                // Animación de celebración
-                const slots = document.querySelectorAll('.letter-slot');
-                slots.forEach(slot => {
-                    slot.classList.add('bounce');
-                    setTimeout(() => slot.classList.remove('bounce'), 1000);
-                });
-                
-            } else {
-                // Incorrecto
-                gameEnded = true;
-                currentStreak = 0;
-                showMessage(`❌ Incorrecto. La palabra era: ${currentWord}`, 'error');
-                
-                // Mostrar la palabra correcta
-                for (let i = 0; i < currentWord.length; i++) {
-                    const slot = document.getElementById(`slot-${i}`);
-                    slot.textContent = currentWord[i];
-                    slot.classList.remove('filled');
-                    slot.classList.add('revealed');
-                }
-                
-                totalArepas += 5; // Consolación
-                document.getElementById('newWordBtn').style.display = 'block';
-            }
-            
-            updateDisplay();
-        }
-
-        // Dar pista
-        function giveHint() {
-            if (gameEnded || hintsUsed >= 3 || totalArepas < 5) {
-                showMessage('No puedes usar más pistas ahora', 'error');
-                return;
-            }
-            
-            // Encontrar posiciones vacías
-            const emptyPositions = [];
-            for (let i = 0; i < currentWord.length; i++) {
-                if (playerGuess[i] === "") {
-                    emptyPositions.push(i);
-                }
-            }
-            
-            if (emptyPositions.length === 0) {
-                showMessage('Ya completaste toda la palabra', 'info');
-                return;
-            }
-            
-            // Revelar una letra aleatoria
-            const randomPos = emptyPositions[Math.floor(Math.random() * emptyPositions.length)];
-            const correctLetter = currentWord[randomPos];
-            
-            playerGuess[randomPos] = correctLetter;
-            const slot = document.getElementById(`slot-${randomPos}`);
-            slot.textContent = correctLetter;
-            slot.classList.add('revealed');
-            slot.classList.add('pulse');
-            setTimeout(() => slot.classList.remove('pulse'), 500);
-            
-            // Marcar la letra como usada
-            const buttons = document.querySelectorAll('.letter-option');
-            buttons.forEach(button => {
-                if (button.textContent === correctLetter && !button.classList.contains('used')) {
-                    button.classList.add('used');
-                    return;
-                }
-            });
-            
-            hintsUsed++;
-            totalArepas -= 5;
-            
-            showMessage(`💡 Pista: "${correctLetter}" (-5 arepas)`, 'info');
-            updateDisplay();
-        }
-
-        // Usar magia
-        function useMagic() {
-            if (gameEnded || totalArepas < 15) {
-                showMessage('No tienes suficientes arepas para la magia', 'error');
-                return;
-            }
-            
-            // Encontrar posiciones vacías
-            const emptyPositions = [];
-            for (let i = 0; i < currentWord.length; i++) {
-                if (playerGuess[i] === "") {
-                    emptyPositions.push(i);
-                }
-            }
-            
-            if (emptyPositions.length === 0) {
-                showMessage('Ya completaste toda la palabra', 'info');
-                return;
-            }
-            
-            // Revelar hasta 3 letras
-            const numToReveal = Math.min(3, emptyPositions.length);
-            const positionsToReveal = emptyPositions.sort(() => Math.random() - 0.5).slice(0, numToReveal);
-            
-            positionsToReveal.forEach(pos => {
-                const correctLetter = currentWord[pos];
-                playerGuess[pos] = correctLetter;
-                const slot = document.getElementById(`slot-${pos}`);
-                slot.textContent = correctLetter;
-                slot.classList.add('magic');
-                slot.classList.add('pulse');
-                setTimeout(() => slot.classList.remove('pulse'), 500);
-                
-                // Marcar la letra como usada
-                const buttons = document.querySelectorAll('.letter-option');
-                buttons.forEach(button => {
-                    if (button.textContent === correctLetter && !button.classList.contains('used')) {
-                        button.classList.add('used');
-                        return;
-                    }
-                });
-            });
-            
-            totalArepas -= 15;
-            showMessage(`✨ ¡Magia! ${numToReveal} letras reveladas (-15 arepas)`, 'magic');
-            updateDisplay();
-        }
-
-        // Siguiente palabra
-        function nextWord() {
-            wordNumber++;
-            selectNewWord();
-        }
-
-        // Mostrar mensaje
-        function showMessage(text, type) {
-            const message = document.getElementById('message');
-            message.textContent = text;
-            message.className = `message ${type}`;
-            message.classList.add('show');
-            
-            setTimeout(() => {
-                message.classList.remove('show');
-            }, 4000);
         }
 
         // Actualizar pantalla
@@ -1060,17 +699,10 @@
             document.getElementById('wordsCompleted').textContent = wordsCompleted;
             document.getElementById('perfectWords').textContent = perfectWords;
             document.getElementById('currentScore').textContent = currentScore;
-            
-            // Actualizar estado de botones
-            document.getElementById('hintBtn').disabled = (totalArepas < 5 || hintsUsed >= 3 || gameEnded);
-            document.getElementById('magicBtn').disabled = (totalArepas < 15 || gameEnded);
         }
 
-        // Iniciar cuando cargue la página
-        window.onload = function() {
-            console.log("Página cargada, iniciando juego...");
-            initGame();
-        };
-    </script>
-</body>
-    </html>
+        // Mostrar mensaje
+        function showMessage(text, type) {
+            const message = document.getElementById('message');
+            message.textContent = text;
+            message.className = `message
