@@ -1,0 +1,790 @@
+// Base de Datos Extendida de Palabras y Jergas Colombianas
+// Más de 200 palabras mezcladas de todas las regiones
+
+const colombianWordsDatabase = [
+        // Región Paisa
+        { word: "AREPA", hint: "Pan de maíz típico, se come con todo", category: "COMIDA PAISA" },
+        { word: "BANDEJA", hint: "Plato típico paisa con frijoles, arroz y más", category: "COMIDA PAISA" },
+        { word: "FRIJOL", hint: "Legumbre infaltable en la bandeja paisa", category: "COMIDA PAISA" },
+        { word: "CHICHARRON", hint: "Carne de cerdo frita, crujiente", category: "COMIDA PAISA" },
+        { word: "MORCILLA", hint: "Embutido de sangre, típico paisa", category: "COMIDA PAISA" },
+        { word: "CHORIZO", hint: "Embutido especiado típico antioqueño", category: "COMIDA PAISA" },
+        { word: "MAZAMORRA", hint: "Postre cremoso hecho con maíz blanco", category: "POSTRES PAISAS" },
+        { word: "NATILLA", hint: "Postre navideño cremoso con canela", category: "POSTRES PAISAS" },
+        { word: "BUÑUELO", hint: "Fritura redonda y esponjosa navideña", category: "POSTRES PAISAS" },
+        { word: "PANDEQUESO", hint: "Pan dulce con queso rallado", category: "PANADERIA PAISA" },
+        
+        // Región Costeña
+        { word: "SANCOCHO", hint: "Sopa con carnes, verduras y yuca", category: "COMIDA COSTEÑA" },
+        { word: "PATACON", hint: "Plátano verde aplastado y frito", category: "COMIDA COSTEÑA" },
+        { word: "BOLLO", hint: "Masa de maíz cocida envuelta en hoja", category: "COMIDA COSTEÑA" },
+        { word: "CASABE", hint: "Torta de yuca brava típica costeña", category: "COMIDA COSTEÑA" },
+        { word: "BOCACHICO", hint: "Pez del río Magdalena, muy apreciado", category: "PESCADOS COSTEÑOS" },
+        { word: "MOJARRA", hint: "Pescado de agua dulce muy consumido", category: "PESCADOS COSTEÑOS" },
+        { word: "SUERO", hint: "Suero costeño, acompaña muchos platos", category: "LACTEOS COSTEÑOS" },
+        { word: "BUTIFARRA", hint: "Embutido típico de la costa atlántica", category: "EMBUTIDOS COSTEÑOS" },
+        { word: "COCONETE", hint: "Dulce de coco rallado y panela", category: "DULCES COSTEÑOS" },
+        { word: "RASPAO", hint: "Hielo raspado con jarabe de colores", category: "POSTRES COSTEÑOS" },
+        
+        // Región Bogotana/Cundinamarquesa
+        { word: "AJIACO", hint: "Sopa típica de Bogotá con pollo y papas", category: "COMIDA BOGOTANA" },
+        { word: "CHANGUA", hint: "Sopa de leche con huevo y cilantro", category: "COMIDA BOGOTANA" },
+        { word: "TAMALES", hint: "Masa rellena envuelta en hoja de plátano", category: "COMIDA BOGOTANA" },
+        { word: "FRITANGA", hint: "Variedad de frituras típicas callejeras", category: "COMIDA BOGOTANA" },
+        { word: "MONDONGO", hint: "Sopa de tripas y verduras", category: "COMIDA BOGOTANA" },
+        { word: "ALMOJABANA", hint: "Pan de queso típico del desayuno", category: "PANADERIA BOGOTANA" },
+        { word: "GUARAPO", hint: "Bebida fermentada de caña de azúcar", category: "BEBIDAS BOGOTANAS" },
+        { word: "CHICHA", hint: "Bebida ancestral de maíz fermentado", category: "BEBIDAS BOGOTANAS" },
+        { word: "MASATO", hint: "Bebida de arroz fermentado", category: "BEBIDAS BOGOTANAS" },
+        { word: "AVENA", hint: "Bebida caliente de avena con canela", category: "BEBIDAS BOGOTANAS" },
+        
+        // Región Caleña/Vallecaucana
+        { word: "PANDEBONO", hint: "Pan dulce hecho con almidón de yuca", category: "COMIDA CALEÑA" },
+        { word: "EMPANADA", hint: "Masa frita rellena de carne o pollo", category: "COMIDA CALEÑA" },
+        { word: "ABORRAJADO", hint: "Plátano maduro con queso, empanizado", category: "COMIDA CALEÑA" },
+        { word: "CHULETA", hint: "Carne de cerdo típica valluna", category: "COMIDA CALEÑA" },
+        { word: "CHAMPUS", hint: "Bebida dulce con maíz y frutas", category: "BEBIDAS CALEÑAS" },
+        { word: "LULADA", hint: "Bebida refrescante con lulo y hielo", category: "BEBIDAS CALEÑAS" },
+        { word: "CHOLAO", hint: "Raspado con frutas y leche condensada", category: "POSTRES CALEÑOS" },
+        { word: "MANJARBLANCO", hint: "Dulce cremoso típico del Valle", category: "POSTRES CALEÑOS" },
+        { word: "BREVAS", hint: "Dulce de higos con arequipe", category: "POSTRES CALEÑOS" },
+        { word: "DESAMARGADO", hint: "Dulce de toronja confitada", category: "POSTRES CALEÑOS" },
+        
+        // Otras regiones
+        { word: "LECHONA", hint: "Cerdo relleno, típico de Tolima", category: "COMIDA TOLIMENSE" },
+        { word: "MAMONA", hint: "Carne de ternera a la llanera", category: "COMIDA LLANERA" },
+        { word: "HAYACA", hint: "Tamal navideño relleno de carnes", category: "COMIDA SANTANDEREANA" },
+        { word: "MUTE", hint: "Sopa santandereana con vísceras", category: "COMIDA SANTANDEREANA" },
+        { word: "VIUDO", hint: "Pescado con yuca y ñame", category: "COMIDA CHOCOANA" },
+        { word: "SANCOCHO", hint: "Sopa de siete carnes del Chocó", category: "COMIDA CHOCOANA" },
+        
+        // Bebidas típicas
+        { word: "AGUARDIENTE", hint: "Licor anisado típico de Colombia", category: "BEBIDAS COLOMBIANAS" },
+        { word: "CHIRRINCHI", hint: "Licor artesanal de caña", category: "BEBIDAS LLANERAS" },
+        { word: "MISTELA", hint: "Licor dulce con hierbas", category: "BEBIDAS TRADICIONALES" },
+        { word: "REFAJO", hint: "Mezcla de cerveza con colombiana", category: "BEBIDAS POPULARES" }
+    ],
+
+    // ===============================
+    // JERGAS Y EXPRESIONES (100+ palabras)
+    // ===============================
+    jergas: [
+        // Jerga Paisa
+        { word: "PARCE", hint: "Amigo, compañero, hermano del alma", category: "JERGA PAISA" },
+        { word: "QUIUBO", hint: "¿Qué hubo? Saludo típico paisa", category: "JERGA PAISA" },
+        { word: "MIJO", hint: "Mi hijo, forma cariñosa de dirigirse", category: "JERGA PAISA" },
+        { word: "GONORREA", hint: "Expresión paisa para algo malo o bueno", category: "JERGA PAISA" },
+        { word: "CHIMBA", hint: "Algo excelente, genial, bacano", category: "JERGA PAISA" },
+        { word: "VERRACO", hint: "Persona valiente, fuerte, capaz", category: "JERGA PAISA" },
+        { word: "MALPARIDO", hint: "Expresión fuerte, mala persona", category: "JERGA PAISA" },
+        { word: "BOBADA", hint: "Tontería, cosa sin importancia", category: "JERGA PAISA" },
+        { word: "BERRACO", hint: "Algo difícil o persona brava", category: "JERGA PAISA" },
+        { word: "SISAS", hint: "Sí, afirmación típica paisa", category: "JERGA PAISA" },
+        { word: "PARCERO", hint: "Amigo, compañero de parche", category: "JERGA PAISA" },
+        { word: "MARICA", hint: "Expresión paisa, amigo (sin ofensa)", category: "JERGA PAISA" },
+        { word: "HIJUEMADRE", hint: "Expresión de sorpresa o admiración", category: "JERGA PAISA" },
+        { word: "SEVERO", hint: "Algo impresionante, genial", category: "JERGA PAISA" },
+        { word: "TENAZ", hint: "Algo difícil o complicado", category: "JERGA PAISA" },
+        
+        // Jerga Costeña
+        { word: "MAMAGALLISMO", hint: "Expresión costeña para algo increíble", category: "JERGA COSTEÑA" },
+        { word: "TIGRE", hint: "Persona astuta o valiente", category: "JERGA COSTEÑA" },
+        { word: "JEVA", hint: "Novia, mujer querida", category: "JERGA COSTEÑA" },
+        { word: "PANA", hint: "Amigo cercano, compañero", category: "JERGA COSTEÑA" },
+        { word: "VACANO", hint: "Algo bueno, chevere, genial", category: "JERGA COSTEÑA" },
+        { word: "BRUTAL", hint: "Algo excelente, impresionante", category: "JERGA COSTEÑA" },
+        { word: "JAJAJA", hint: "Risa característica costeña", category: "JERGA COSTEÑA" },
+        { word: "KLOK", hint: "Persona lista, inteligente", category: "JERGA COSTEÑA" },
+        { word: "MAMON", hint: "Persona molesta o pesada", category: "JERGA COSTEÑA" },
+        { word: "RATÓN", hint: "Persona tacaña o mezquina", category: "JERGA COSTEÑA" },
+        { word: "MACHETEAR", hint: "Trabajar duro, esforzarse", category: "JERGA COSTEÑA" },
+        { word: "BURDA", hint: "Mucho, demasiado, en exceso", category: "JERGA COSTEÑA" },
+        { word: "LADILLA", hint: "Persona molesta o pesada", category: "JERGA COSTEÑA" },
+        { word: "MOLLETO", hint: "Pan pequeño, también persona", category: "JERGA COSTEÑA" },
+        { word: "GUEVON", hint: "Persona tonta o floja", category: "JERGA COSTEÑA" },
+        
+        // Jerga Bogotana/Rola
+        { word: "ROLO", hint: "Persona nacida en Bogotá", category: "JERGA BOGOTANA" },
+        { word: "PARCERO", hint: "Amigo, compañero de aventuras", category: "JERGA BOGOTANA" },
+        { word: "BACANO", hint: "Algo bueno, chevere, genial", category: "JERGA BOGOTANA" },
+        { word: "CHIMBO", hint: "Algo malo, feo, de mala calidad", category: "JERGA BOGOTANA" },
+        { word: "JARTERA", hint: "Aburrimiento, fastidio", category: "JERGA BOGOTANA" },
+        { word: "MALUQUERA", hint: "Malestar, sensación desagradable", category: "JERGA BOGOTANA" },
+        { word: "CHANDA", hint: "Trabajo, labor que hacer", category: "JERGA BOGOTANA" },
+        { word: "CAMELLO", hint: "Trabajo, empleo", category: "JERGA BOGOTANA" },
+        { word: "CASCAR", hint: "Golpear, pegar", category: "JERGA BOGOTANA" },
+        { word: "EMBARRAR", hint: "Arruinar algo, meter la pata", category: "JERGA BOGOTANA" },
+        { word: "JINCHO", hint: "Persona borracha", category: "JERGA BOGOTANA" },
+        { word: "GUAYABO", hint: "Resaca después de beber", category: "JERGA BOGOTANA" },
+        { word: "MAN", hint: "Hombre, tipo, persona", category: "JERGA BOGOTANA" },
+        { word: "VIEJA", hint: "Mujer, novia, esposa", category: "JERGA BOGOTANA" },
+        { word: "PELAO", hint: "Niño, joven, muchacho", category: "JERGA BOGOTANA" },
+        
+        // Jerga Caleña
+        { word: "CALENO", hint: "Persona nacida en Cali", category: "JERGA CALEÑA" },
+        { word: "SOCIO", hint: "Amigo, compañero", category: "JERGA CALEÑA" },
+        { word: "RUMBA", hint: "Fiesta, parranda, diversión", category: "JERGA CALEÑA" },
+        { word: "VACILE", hint: "Diversión, pasarla bien", category: "JERGA CALEÑA" },
+        { word: "VAINA", hint: "Cosa, asunto, situación", category: "JERGA CALEÑA" },
+        { word: "MUELA", hint: "Mentira, cuento falso", category: "JERGA CALEÑA" },
+        { word: "CATIRA", hint: "Mujer rubia o de piel clara", category: "JERGA CALEÑA" },
+        { word: "MONO", hint: "Persona rubia o de piel clara", category: "JERGA CALEÑA" },
+        { word: "MORENO", hint: "Persona de piel oscura", category: "JERGA CALEÑA" },
+        { word: "PAILA", hint: "Expresión de decepción", category: "JERGA CALEÑA" },
+        { word: "GUAPO", hint: "Valiente, corajudo", category: "JERGA CALEÑA" },
+        { word: "EMBALAR", hint: "Acelerar, ir rápido", category: "JERGA CALEÑA" },
+        { word: "JINETE", hint: "Persona que maneja bien", category: "JERGA CALEÑA" },
+        { word: "SALSA", hint: "Ambiente, diversión, música", category: "JERGA CALEÑA" },
+        { word: "MELOSO", hint: "Persona cariñosa, romántica", category: "JERGA CALEÑA" },
+        
+        // Jerga General Colombiana
+        { word: "CHEVERE", hint: "Algo bueno, genial, excelente", category: "JERGA GENERAL" },
+        { word: "BERRACO", hint: "Algo difícil o impresionante", category: "JERGA GENERAL" },
+        { word: "MAMAR", hint: "Molestar, fastidiar", category: "JERGA GENERAL" },
+        { word: "JARTO", hint: "Cansado, aburrido", category: "JERGA GENERAL" },
+        { word: "CUCHO", hint: "Papá, señor mayor", category: "JERGA GENERAL" },
+        { word: "CUCHA", hint: "Mamá, señora mayor", category: "JERGA GENERAL" },
+        { word: "PELADA", hint: "Niña, muchacha joven", category: "JERGA GENERAL" },
+        { word: "GOMELO", hint: "Persona de clase alta, fresa", category: "JERGA GENERAL" },
+        { word: "NACO", hint: "Persona de mal gusto", category: "JERGA GENERAL" },
+        { word: "FECA", hint: "Algo feo, desagradable", category: "JERGA GENERAL" },
+        { word: "JINCHO", hint: "Borracho, ebrio", category: "JERGA GENERAL" },
+        { word: "PORRO", hint: "Cigarrillo de marihuana", category: "JERGA GENERAL" },
+        { word: "BARETA", hint: "Marihuana", category: "JERGA GENERAL" },
+        { word: "ENTUCAR", hint: "Vestirse elegante", category: "JERGA GENERAL" },
+        { word: "PLATA", hint: "Dinero en efectivo", category: "JERGA GENERAL" },
+        { word: "LUCA", hint: "Mil pesos colombianos", category: "JERGA GENERAL" },
+        { word: "LUCAS", hint: "Miles de pesos", category: "JERGA GENERAL" },
+        { word: "PALO", hint: "Millón de pesos", category: "JERGA GENERAL" },
+        { word: "FIERRO", hint: "Carro, automóvil", category: "JERGA GENERAL" },
+        { word: "RANCHO", hint: "Casa, hogar", category: "JERGA GENERAL" },
+        { word: "PILAS", hint: "Atención, cuidado", category: "JERGA GENERAL" },
+        { word: "MALUCO", hint: "Malo, enfermo", category: "JERGA GENERAL" },
+        { word: "GUEVON", hint: "Tonto, perezoso", category: "JERGA GENERAL" },
+        { word: "HIJUEMADRE", hint: "Expresión de sorpresa", category: "JERGA GENERAL" },
+        { word: "TOMBO", hint: "Policía", category: "JERGA GENERAL" },
+        { word: "SAPO", hint: "Persona chismosa", category: "JERGA GENERAL" },
+        { word: "LAMPARA", hint: "Persona que presume", category: "JERGA GENERAL" },
+        { word: "CHICHIPATO", hint: "Tacaño, mezquino", category: "JERGA GENERAL" },
+        { word: "MAMERTO", hint: "Persona tonta", category: "JERGA GENERAL" },
+        { word: "BOBO", hint: "Tonto, ingenuo", category: "JERGA GENERAL" },
+        { word: "BOLETA", hint: "Vergüenza, pena", category: "JERGA GENERAL" },
+        { word: "CAMELLO", hint: "Trabajo duro", category: "JERGA GENERAL" },
+        { word: "CHIRRETE", hint: "Diarrea", category: "JERGA GENERAL" },
+        { word: "CULICAGADO", hint: "Persona muy joven", category: "JERGA GENERAL" },
+        { word: "EMBERRACARSE", hint: "Enojarse mucho", category: "JERGA GENERAL" },
+        { word: "GUAMAZO", hint: "Golpe fuerte", category: "JERGA GENERAL" },
+        { word: "JUEMADRE", hint: "Expresión de sorpresa", category: "JERGA GENERAL" },
+        { word: "MAMAGALLADA", hint: "Tontería, bobada", category: "JERGA GENERAL" },
+        { word: "PENDEJADA", hint: "Tontería, cosa sin sentido", category: "JERGA GENERAL" },
+        { word: "GUEVONADA", hint: "Tontería, bobada", category: "JERGA GENERAL" },
+        { word: "CHIMBA", hint: "Genital femenino/algo genial", category: "JERGA GENERAL" }
+    ],
+
+    // ===============================
+    // MÚSICA Y BAILES (25+ palabras)
+    // ===============================
+    musica: [
+        { word: "CUMBIA", hint: "Ritmo musical tradicional del Caribe", category: "MÚSICA COSTEÑA" },
+        { word: "VALLENATO", hint: "Género musical típico de la costa", category: "MÚSICA COSTEÑA" },
+        { word: "SALSA", hint: "Género musical y baile típico de Cali", category: "MÚSICA CALEÑA" },
+        { word: "MERENGUE", hint: "Ritmo musical alegre del Caribe", category: "MÚSICA COSTEÑA" },
+        { word: "GAITA", hint: "Instrumento musical típico costeño", category: "INSTRUMENTOS COSTEÑOS" },
+        { word: "ACORDEON", hint: "Instrumento principal del vallenato", category: "INSTRUMENTOS COSTEÑOS" },
+        { word: "GUACHARACA", hint: "Instrumento de percusión vallenato", category: "INSTRUMENTOS COSTEÑOS" },
+        { word: "CAJA", hint: "Tambor pequeño del vallenato", category: "INSTRUMENTOS COSTEÑOS" },
+        { word: "MAPALÉ", hint: "Baile tradicional de la costa", category: "BAILES COSTEÑOS" },
+        { word: "BULLERENGUE", hint: "Baile y canto afrocaribe", category: "BAILES COSTEÑOS" },
+        { word: "CURRULAO", hint: "Ritmo típico del Pacífico", category: "MÚSICA PACIFICA" },
+        { word: "MARIMBA", hint: "Instrumento del Pacífico", category: "INSTRUMENTOS PACIFICOS" },
+        { word: "BAMBUCO", hint: "Ritmo tradicional andino", category: "MÚSICA ANDINA" },
+        { word: "GUABINA", hint: "Ritmo tradicional santandereano", category: "MÚSICA SANTANDEREANA" },
+        { word: "TORBELLINO", hint: "Ritmo boyacense tradicional", category: "MÚSICA BOYACENSE" },
+        { word: "PASILLO", hint: "Ritmo melancólico andino", category: "MÚSICA ANDINA" },
+        { word: "JOROPO", hint: "Ritmo y baile llanero", category: "MÚSICA LLANERA" },
+        { word: "ARPA", hint: "Instrumento principal llanero", category: "INSTRUMENTOS LLANEROS" },
+        { word: "CUATRO", hint: "Guitarra pequeña llanera", category: "INSTRUMENTOS LLANEROS" },
+        { word: "MARACAS", hint: "Instrumento de percusión llanero", category: "INSTRUMENTOS LLANEROS" },
+        { word: "PORRO", hint: "Ritmo alegre de banda", category: "MÚSICA COSTEÑA" },
+        { word: "FANDANGO", hint: "Baile tradicional costeño", category: "BAILES COSTEÑOS" },
+        { word: "CHANDÉ", hint: "Ritmo y baile costeño", category: "MÚSICA COSTEÑA" },
+        { word: "PUYA", hint: "Ritmo rápido costeño", category: "MÚSICA COSTEÑA" },
+        { word: "SON", hint: "Ritmo tradicional costeño", category: "MÚSICA COSTEÑA" }
+    ],
+
+    // ===============================
+    // FAUNA Y FLORA (25+ palabras)
+    // ===============================
+    naturaleza: [
+        { word: "CONDOR", hint: "Ave nacional de Colombia", category: "AVES COLOMBIANAS" },
+        { word: "COLIBRÍ", hint: "Ave pequeña que vuela hacia atrás", category: "AVES COLOMBIANAS" },
+        { word: "TUCÁN", hint: "Ave de pico grande y colorido", category: "AVES COLOMBIANAS" },
+        { word: "GUACAMAYA", hint: "Loro grande y colorido", category: "AVES COLOMBIANAS" },
+        { word: "FLAMINGO", hint: "Ave rosada de patas largas", category: "AVES COLOMBIANAS" },
+        { word: "JAGUAR", hint: "Felino grande manchado", category: "MAMIFEROS COLOMBIANOS" },
+        { word: "OSO", hint: "Oso de anteojos andino", category: "MAMIFEROS COLOMBIANOS" },
+        { word: "DELFÍN", hint: "Mamífero marino inteligente", category: "MAMIFEROS MARINOS" },
+        { word: "BALLENA", hint: "Mamífero marino gigante", category: "MAMIFEROS MARINOS" },
+        { word: "IGUANA", hint: "Reptil verde grande", category: "REPTILES COLOMBIANOS" },
+        { word: "CAIMÁN", hint: "Reptil acuático parecido al cocodrilo", category: "REPTILES COLOMBIANOS" },
+        { word: "ANACONDA", hint: "Serpiente gigante acuática", category: "REPTILES COLOMBIANOS" },
+        { word: "ORQUÍDEA", hint: "Flor nacional de Colombia", category: "FLORES COLOMBIANAS" },
+        { word: "CEIBA", hint: "Árbol sagrado gigante", category: "ARBOLES COLOMBIANOS" },
+        { word: "PALMA", hint: "Árbol tropical de cocos", category: "ARBOLES COLOMBIANOS" },
+        { word: "CAFÉ", hint: "Grano dorado colombiano", category: "CULTIVOS COLOMBIANOS" },
+        { word: "CACAO", hint: "Fruto del chocolate", category: "CULTIVOS COLOMBIANOS" },
+        { word: "PLATANO", hint: "Fruta alargada tropical", category: "FRUTAS COLOMBIANAS" },
+        { word: "MANGO", hint: "Fruta dulce y jugosa", category: "FRUTAS COLOMBIANAS" },
+        { word: "GUAYABA", hint: "Fruta rosada aromática", category: "FRUTAS COLOMBIANAS" },
+        { word: "LULO", hint: "Fruta ácida para jugos", category: "FRUTAS COLOMBIANAS" },
+        { word: "MARACUYÁ", hint: "Fruta de la pasión", category: "FRUTAS COLOMBIANAS" },
+        { word: "CURUBA", hint: "Fruta alargada andina", category: "FRUTAS COLOMBIANAS" },
+        { word: "TOMATE", hint: "Fruto rojo de árbol", category: "FRUTAS COLOMBIANAS" },
+        { word: "CHONTADURO", hint: "Fruta del Pacífico", category: "FRUTAS COLOMBIANAS" }
+    ],
+
+    // ===============================
+    // CULTURA Y TRADICIONES (25+ palabras)
+    // ===============================
+    cultura: [
+        { word: "PAISA", hint: "Gentilicio de Antioquia y el Eje Cafetero", category: "CULTURA PAISA" },
+        { word: "COSTEÑO", hint: "Persona nacida en la costa caribeña", category: "CULTURA COSTEÑA" },
+        { word: "ROLO", hint: "Persona nacida en Bogotá", category: "CULTURA BOGOTANA" },
+        { word: "CALENO", hint: "Persona nacida en Cali", category: "CULTURA CALEÑA" },
+        { word: "CARNAVAL", hint: "Fiesta de Barranquilla patrimonio", category: "FIESTAS COSTEÑAS" },
+        { word: "FERIA", hint: "Feria de las Flores de Medellín", category: "FIESTAS PAISAS" },
+        { word: "FESTIVAL", hint: "Festival de la Leyenda Vallenata", category: "FESTIVALES COSTEÑOS" },
+        { word: "SILLETERO", hint: "Campesino que lleva silletas", category: "TRADICIONES PAISAS" },
+        { word: "SILLETA", hint: "Arreglo floral en madera", category: "TRADICIONES PAISAS" },
+        { word: "GUAYABERA", hint: "Camisa típica costeña", category: "VESTIMENTA COSTEÑA" },
+        { word: "SOMBRERO", hint: "Sombrero vueltiao costeño", category: "VESTIMENTA COSTEÑA" },
+        { word: "PONCHO", hint: "Prenda andina de lana", category: "VESTIMENTA ANDINA" },
+        { word: "ALPARGATA", hint: "Calzado tradicional campesino", category: "VESTIMENTA TRADICIONAL" },
+        { word: "MACHETE", hint: "Herramienta campesina", category: "HERRAMIENTAS CAMPESINAS" },
+        { word: "CARRIEL", hint: "Bolso tradicional paisa", category: "ACCESORIOS PAISAS" },
+        { word: "JÍBARO", hint: "Campesino cafetero", category: "PERSONAJES PAISAS" },
+        { word: "BOGAS", hint: "Navegantes del río Magdalena", category: "OFICIOS TRADICIONALES" },
+        { word: "VAQUERO", hint: "Ganadero llanero", category: "OFICIOS LLANEROS" },
+        { word: "PESCADOR", hint: "Oficio tradicional costeño", category: "OFICIOS COSTEÑOS" },
+        { word: "MINERO", hint: "Trabajador de minas", category: "OFICIOS TRADICIONALES" },
+        { word: "ARRIERO", hint: "Conductor de mulas", category: "OFICIOS PAISAS" },
+        { word: "TROVADOR", hint: "Cantante de versos", category: "ARTISTAS POPULARES" },
+        { word: "JUGLAR", hint: "Cantante callejero", category: "ARTISTAS POPULARES" },
+    { word: "COPLA", hint: "Verso popular cantado", category: "LITERATURA POPULAR" },
+    { word: "DÉCIMA", hint: "Verso de diez líneas", category: "LITERATURA POPULAR" },
+
+    // OBJETOS Y HERRAMIENTAS
+    { word: "BATEA", hint: "Recipiente para lavar oro", category: "HERRAMIENTAS MINERAS" },
+    { word: "CANOA", hint: "Embarcación pequeña", category: "EMBARCACIONES" },
+    { word: "CHINCHORRO", hint: "Hamaca de pescar", category: "HERRAMIENTAS PESQUERAS" },
+    { word: "FOGÓN", hint: "Estufa de leña", category: "UTENSILIOS COCINA" },
+    { word: "MÚCURA", hint: "Tinaja de barro para agua", category: "UTENSILIOS COCINA" },
+    { word: "PETACA", hint: "Baúl de cuero", category: "MOBILIARIO TRADICIONAL" },
+    { word: "PILÓN", hint: "Mortero grande de madera", category: "UTENSILIOS COCINA" },
+    { word: "TABURETE", hint: "Asiento pequeño de madera", category: "MOBILIARIO TRADICIONAL" },
+    { word: "TINAJA", hint: "Vasija grande de barro", category: "UTENSILIOS COCINA" },
+    { word: "TOTUMA", hint: "Recipiente de calabaza", category: "UTENSILIOS TRADICIONALES" },
+
+    // LUGARES Y GEOGRAFÍA
+    { word: "CIÉNAGA", hint: "Lago poco profundo", category: "GEOGRAFIA COSTEÑA" },
+    { word: "CORDILLERA", hint: "Cadena de montañas", category: "GEOGRAFIA ANDINA" },
+    { word: "LLANO", hint: "Planicie extensa", category: "GEOGRAFIA LLANERA" },
+    { word: "MAGDALENA", hint: "Río principal de Colombia", category: "RIOS COLOMBIANOS" },
+    { word: "CAUCA", hint: "Río del occidente", category: "RIOS COLOMBIANOS" },
+    { word: "ORINOCO", hint: "Río de los llanos", category: "RIOS COLOMBIANOS" },
+    { word: "AMAZONAS", hint: "Río y selva del sur", category: "RIOS COLOMBIANOS" },
+    { word: "PÁRAMO", hint: "Ecosistema de alta montaña", category: "ECOSISTEMAS ANDINOS" },
+    { word: "SELVA", hint: "Bosque tropical húmedo", category: "ECOSISTEMAS COLOMBIANOS" },
+    { word: "SABANA", hint: "Llanura con pastos", category: "ECOSISTEMAS LLANEROS" },
+
+    // PROFESIONES Y OFICIOS
+    { word: "ALFARERO", hint: "Artesano del barro", category: "OFICIOS ARTESANALES" },
+    { word: "CERAMISTA", hint: "Artista de la cerámica", category: "OFICIOS ARTESANALES" },
+    { word: "GUAQUERO", hint: "Buscador de tesoros", category: "OFICIOS TRADICIONALES" },
+    { word: "LECHERO", hint: "Vendedor de leche", category: "OFICIOS URBANOS" },
+    { word: "PANADERO", hint: "Elaborador de pan", category: "OFICIOS URBANOS" },
+    { word: "PREGONERO", hint: "Vendedor ambulante", category: "OFICIOS URBANOS" },
+    { word: "SOBADOR", hint: "Curandero tradicional", category: "OFICIOS CURATIVOS" },
+    { word: "YERBATERO", hint: "Vendedor de hierbas medicinales", category: "OFICIOS CURATIVOS" },
+    { word: "ZAMBO", hint: "Músico de tambores", category: "OFICIOS MUSICALES" },
+    { word: "GAITERO", hint: "Músico de gaitas", category: "OFICIOS MUSICALES" },
+
+    // DULCES Y POSTRES ADICIONALES
+    { word: "COCADA", hint: "Dulce de coco rallado", category: "DULCES COSTEÑOS" },
+    { word: "ALEGRÍA", hint: "Dulce de ajonjolí", category: "DULCES COSTEÑOS" },
+    { word: "AREQUIPE", hint: "Dulce de leche espeso", category: "DULCES COLOMBIANOS" },
+    { word: "BOCADILLO", hint: "Dulce de guayaba en bloque", category: "DULCES COLOMBIANOS" },
+    { word: "CASQUITOS", hint: "Dulce de guayaba en almíbar", category: "DULCES COLOMBIANOS" },
+    { word: "CONSERVA", hint: "Fruta en almíbar", category: "DULCES COLOMBIANOS" },
+    { word: "CUAJADA", hint: "Queso fresco con melao", category: "POSTRES COLOMBIANOS" },
+    { word: "MELAO", hint: "Miel de panela", category: "ENDULZANTES COLOMBIANOS" },
+    { word: "PANELITA", hint: "Dulce de panela pequeño", category: "DULCES COLOMBIANOS" },
+    { word: "POSTRE", hint: "Dulce de natas", category: "POSTRES BOGOTANOS" },
+
+    // VERDURAS Y TUBÉRCULOS
+    { word: "YUCA", hint: "Tubérculo básico colombiano", category: "TUBERCULOS COLOMBIANOS" },
+    { word: "ÑAME", hint: "Tubérculo de la costa", category: "TUBERCULOS COSTEÑOS" },
+    { word: "PAPA", hint: "Tubérculo andino", category: "TUBERCULOS ANDINOS" },
+    { word: "ARRACACHA", hint: "Tubérculo amarillo andino", category: "TUBERCULOS ANDINOS" },
+    { word: "CHACHAFRUTO", hint: "Leguminosa andina", category: "LEGUMBRES ANDINAS" },
+    { word: "AHUYAMA", hint: "Calabaza anaranjada", category: "VERDURAS COLOMBIANAS" },
+    { word: "CILANTRO", hint: "Hierba aromática esencial", category: "HIERBAS COLOMBIANAS" },
+    { word: "CEBOLLA", hint: "Bulbo básico de cocina", category: "VERDURAS COLOMBIANAS" },
+    { word: "AJO", hint: "Condimento picante", category: "CONDIMENTOS COLOMBIANOS" },
+    { word: "ACHIOTE", hint: "Condimento rojizo", category: "CONDIMENTOS COLOMBIANOS" },
+
+    // EXPRESIONES Y DICHOS
+    { word: "AJALA", hint: "Expresión de sorpresa", category: "EXPRESIONES GENERALES" },
+    { word: "ATATAY", hint: "Expresión de asco", category: "EXPRESIONES GENERALES" },
+    { word: "ECHE", hint: "Oye, escucha", category: "EXPRESIONES GENERALES" },
+    { word: "OIGA", hint: "Escuche, ponga atención", category: "EXPRESIONES GENERALES" },
+    { word: "SUMERCE", hint: "Su merced, usted", category: "EXPRESIONES TRADICIONALES" },
+    { word: "MIRE", hint: "Vea, observe", category: "EXPRESIONES GENERALES" },
+    { word: "PUES", hint: "Muletilla colombiana", category: "EXPRESIONES GENERALES" },
+    { word: "BUENO", hint: "Muletilla al contestar teléfono", category: "EXPRESIONES GENERALES" },
+    { word: "LISTO", hint: "De acuerdo, está bien", category: "EXPRESIONES GENERALES" },
+    { word: "HAGAMOS", hint: "Expresión de acuerdo", category: "EXPRESIONES GENERALES" }
+];
+
+// ===============================
+// FUNCIONES UTILITARIAS
+// ===============================
+
+// Función para obtener todas las palabras
+function getAllWords() {
+    return colombianWordsDatabase;
+}
+
+// Función para obtener palabras por categoría específica
+function getWordsByCategory(searchCategory) {
+    return colombianWordsDatabase.filter(word => 
+        word.category.toLowerCase().includes(searchCategory.toLowerCase())
+    );
+}
+
+// Función para obtener palabras por región
+function getWordsByRegion(region) {
+    const regionMap = {
+        'paisa': ['PAISA'],
+        'costeño': ['COSTEÑA', 'COSTEÑO'],
+        'bogotano': ['BOGOTANA', 'BOGOTANO'],
+        'caleño': ['CALEÑA', 'CALEÑO'],
+        'tolimense': ['TOLIMENSE'],
+        'llanero': ['LLANERA', 'LLANERO'],
+        'santandereano': ['SANTANDEREANA'],
+        'chocoano': ['CHOCOANA', 'PACIFICA']
+    };
+    
+    const searchTerms = regionMap[region.toLowerCase()] || [region.toUpperCase()];
+    
+    return colombianWordsDatabase.filter(word => 
+        searchTerms.some(term => word.category.includes(term))
+    );
+}
+
+// Función para obtener solo jergas
+function getOnlyJergas() {
+    return colombianWordsDatabase.filter(word => 
+        word.category.includes('JERGA')
+    );
+}
+
+// Función para obtener palabras por dificultad (basada en longitud)
+function getWordsByDifficulty() {
+    return {
+        easy: colombianWordsDatabase.filter(word => word.word.length <= 6),
+        medium: colombianWordsDatabase.filter(word => word.word.length >= 7 && word.word.length <= 9),
+        hard: colombianWordsDatabase.filter(word => word.word.length >= 10)
+    };
+}
+
+// Función para obtener una palabra aleatoria
+function getRandomWord() {
+    return colombianWordsDatabase[Math.floor(Math.random() * colombianWordsDatabase.length)];
+}
+
+// Función para buscar palabras por hint
+function searchByHint(searchTerm) {
+    return colombianWordsDatabase.filter(word => 
+        word.hint.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+}
+
+// Función para obtener estadísticas de la base de datos
+function getDatabaseStats() {
+    const stats = {
+        totalWords: colombianWordsDatabase.length,
+        byCategory: {},
+        byRegion: {},
+        byLength: {
+            short: 0,      // ≤ 5 letras
+            medium: 0,     // 6-8 letras
+            long: 0,       // 9-11 letras
+            veryLong: 0    // ≥ 12 letras
+        },
+        jergas: 0,
+        comidas: 0
+    };
+    
+    colombianWordsDatabase.forEach(word => {
+        // Contar por categoría
+        stats.byCategory[word.category] = (stats.byCategory[word.category] || 0) + 1;
+        
+        // Contar por región
+        const region = extractRegion(word.category);
+        stats.byRegion[region] = (stats.byRegion[region] || 0) + 1;
+        
+        // Contar por longitud
+        const length = word.word.length;
+        if (length <= 5) stats.byLength.short++;
+        else if (length <= 8) stats.byLength.medium++;
+        else if (length <= 11) stats.byLength.long++;
+        else stats.byLength.veryLong++;
+        
+        // Contar jergas
+        if (word.category.includes('JERGA')) stats.jergas++;
+        
+        // Contar comidas
+        if (word.category.includes('COMIDA') || word.category.includes('BEBIDA') || word.category.includes('POSTRE')) {
+            stats.comidas++;
+        }
+    });
+    
+    return stats;
+}
+
+// Función auxiliar para extraer región de categoría
+function extractRegion(category) {
+    if (category.includes('PAISA')) return 'PAISA';
+    if (category.includes('COSTEÑ')) return 'COSTEÑO';
+    if (category.includes('BOGOTANA') || category.includes('BOGOTANO')) return 'BOGOTANO';
+    if (category.includes('CALEÑ')) return 'CALEÑO';
+    if (category.includes('TOLIMENSE')) return 'TOLIMENSE';
+    if (category.includes('LLANERA') || category.includes('LLANERO')) return 'LLANERO';
+    if (category.includes('SANTANDEREANA')) return 'SANTANDEREANO';
+    if (category.includes('CHOCOANA') || category.includes('PACIFICA')) return 'CHOCOANO';
+    return 'GENERAL';
+}
+
+// Función para obtener palabras aleatorias de una cantidad específica
+function getRandomWords(count) {
+    const shuffled = [...colombianWordsDatabase].sort(() => 0.5 - Math.random());
+    return shuffled.slice(0, count);
+}
+
+// Función para obtener categorías únicas
+function getUniqueCategories() {
+    return [...new Set(colombianWordsDatabase.map(word => word.category))].sort();
+}
+
+// ===============================
+// EXPORTAR PARA USO EXTERNO
+// ===============================
+
+// Para usar en Node.js
+if (typeof module !== 'undefined' && module.exports) {
+    module.exports = {
+        colombianWordsDatabase,
+        getAllWords,
+        getWordsByCategory,
+        getWordsByRegion,
+        getOnlyJergas,
+        getWordsByDifficulty,
+        getRandomWord,
+        getRandomWords,
+        searchByHint,
+        getDatabaseStats,
+        getUniqueCategories
+    };
+}
+
+// Para usar en navegador
+if (typeof window !== 'undefined') {
+    window.ColombianWords = {
+        database: colombianWordsDatabase,
+        getAllWords,
+        getWordsByCategory,
+        getWordsByRegion,
+        getOnlyJergas,
+        getWordsByDifficulty,
+        getRandomWord,
+        getRandomWords,
+        searchByHint,
+        getDatabaseStats,
+        getUniqueCategories
+    };
+}
+
+// ===============================
+// MOSTRAR RESUMEN EN CONSOLA
+// ===============================
+console.log("=== BASE DE DATOS DE PALABRAS COLOMBIANAS (VERSIÓN UNIFICADA) ===");
+const stats = getDatabaseStats();
+console.log("📊 Estadísticas generales:");
+console.log(`   • Total de palabras: ${stats.totalWords}`);
+console.log(`   • Jergas: ${stats.jergas}`);
+console.log(`   • Comidas y bebidas: ${stats.comidas}`);
+console.log("");
+console.log("📏 Por longitud de palabra:");
+console.log(`   • Cortas (≤5 letras): ${stats.byLength.short}`);
+console.log(`   • Medianas (6-8 letras): ${stats.byLength.medium}`);
+console.log(`   • Largas (9-11 letras): ${stats.byLength.long}`);
+console.log(`   • Muy largas (≥12 letras): ${stats.byLength.veryLong}`);
+console.log("");
+console.log("🗺️ Por región:");
+Object.keys(stats.byRegion).forEach(region => {
+    console.log(`   • ${region}: ${stats.byRegion[region]} palabras`);
+});
+console.log("");
+console.log("🎲 Ejemplos de palabras aleatorias:");
+for (let i = 0; i < 3; i++) {
+    const word = getRandomWord();
+    console.log(`   "${word.word}" - ${word.hint} (${word.category})`);
+}
+console.log("");
+console.log("✅ ¡Base de datos lista para Arepadle Pro! 🫓");
+console.log("🔄 Todas las palabras están mezcladas sin separación por dificultad");
+console.log("🌟 Uso: colombianWordsDatabase es un array con todas las palabras");ante callejero", category: "ARTISTAS POPULARES" },
+        { word: "COPLA", hint: "Verso popular cantado", category: "LITERATURA POPULAR" },
+        { word: "DÉCIMA", hint: "Verso de diez líneas", category: "LITERATURA POPULAR" }
+    ]
+};
+
+// ===============================
+// FUNCIONES UTILITARIAS
+// ===============================
+
+// Función para obtener todas las palabras mezcladas
+function getAllWords() {
+    const allWords = [];
+    Object.keys(colombianWordsDatabase).forEach(category => {
+        allWords.push(...colombianWordsDatabase[category]);
+    });
+    return allWords;
+}
+
+// Función para obtener palabras por categoría
+function getWordsByCategory(categoryName) {
+    return colombianWordsDatabase[categoryName] || [];
+}
+
+// Función para obtener palabras por región
+function getWordsByRegion(region) {
+    const allWords = getAllWords();
+    return allWords.filter(word => 
+        word.category.toLowerCase().includes(region.toLowerCase())
+    );
+}
+
+// Función para obtener solo jergas
+function getOnlyJergas() {
+    return colombianWordsDatabase.jergas;
+}
+
+// Función para obtener palabras por dificultad (basada en longitud)
+function getWordsByDifficulty() {
+    const allWords = getAllWords();
+    return {
+        easy: allWords.filter(word => word.word.length <= 6),
+        medium: allWords.filter(word => word.word.length >= 7 && word.word.length <= 9),
+        hard: allWords.filter(word => word.word.length >= 10)
+    };
+}
+
+// Función para obtener una palabra aleatoria
+function getRandomWord() {
+    const allWords = getAllWords();
+    return allWords[Math.floor(Math.random() * allWords.length)];
+}
+
+// Función para buscar palabras por hint
+function searchByHint(searchTerm) {
+    const allWords = getAllWords();
+    return allWords.filter(word => 
+        word.hint.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+}
+
+// Función para obtener estadísticas de la base de datos
+function getDatabaseStats() {
+    const stats = {
+        totalWords: 0,
+        categoriesCount: Object.keys(colombianWordsDatabase).length,
+        byCategory: {},
+        byRegion: {},
+        byDifficulty: getWordsByDifficulty()
+    };
+    
+    Object.keys(colombianWordsDatabase).forEach(category => {
+        const words = colombianWordsDatabase[category];
+        stats.byCategory[category] = words.length;
+        stats.totalWords += words.length;
+        
+        // Contar por región
+        words.forEach(word => {
+            const region = extractRegion(word.category);
+            if (region) {
+                stats.byRegion[region] = (stats.byRegion[region] || 0) + 1;
+            }
+        });
+    });
+    
+    return stats;
+}
+
+// Función auxiliar para extraer región de categoría
+function extractRegion(category) {
+    const regions = ['PAISA', 'COSTEÑA', 'COSTEÑO', 'BOGOTANA', 'BOGOTANO', 'CALEÑA', 'CALEÑO', 'TOLIMENSE', 'LLANERA', 'LLANERO', 'SANTANDEREANA', 'CHOCOANA', 'PACIFICA'];
+    for (let region of regions) {
+        if (category.includes(region)) {
+            return region;
+        }
+    }
+    return 'GENERAL';
+}
+
+// ===============================
+// EJEMPLOS DE USO
+// ===============================
+
+// Ejemplo 1: Obtener todas las palabras
+console.log("Total de palabras:", getAllWords().length);
+
+// Ejemplo 2: Obtener solo jergas
+console.log("Total de jergas:", getOnlyJergas().length);
+
+// Ejemplo 3: Obtener palabras paisas
+console.log("Palabras paisas:", getWordsByRegion('paisa').length);
+
+// Ejemplo 4: Obtener estadísticas completas
+console.log("Estadísticas:", getDatabaseStats());
+
+// Ejemplo 5: Palabra aleatoria
+console.log("Palabra aleatoria:", getRandomWord());
+
+// ===============================
+// PALABRAS ADICIONALES PARA COMPLETAR 200+
+// ===============================
+
+const palabrasAdicionales = [
+    // Más jergas específicas
+    { word: "TUSA", hint: "Tristeza por amor", category: "JERGA GENERAL" },
+    { word: "CULERO", hint: "Persona miedosa", category: "JERGA GENERAL" },
+    { word: "BOLSA", hint: "Persona fea", category: "JERGA GENERAL" },
+    { word: "CHORRO", hint: "Ladrón", category: "JERGA GENERAL" },
+    { word: "GONZA", hint: "Tonto, bobo", category: "JERGA GENERAL" },
+    { word: "GUEVA", hint: "Pereza, flojera", category: "JERGA GENERAL" },
+    { word: "JÍBARO", hint: "Campesino, montañero", category: "JERGA GENERAL" },
+    { word: "MACONDO", hint: "Pueblo imaginario, lugar perdido", category: "JERGA GENERAL" },
+    { word: "ÑERO", hint: "Persona de barrio popular", category: "JERGA GENERAL" },
+    { word: "PARAR", hint: "Prestar atención", category: "JERGA GENERAL" },
+    { word: "QUIETO", hint: "Tranquilo, calmado", category: "JERGA GENERAL" },
+    { word: "RUMBEAR", hint: "Salir de fiesta", category: "JERGA GENERAL" },
+    { word: "SOPLAR", hint: "Delatar, contar secretos", category: "JERGA GENERAL" },
+    { word: "TRAGAR", hint: "Enamorarse", category: "JERGA GENERAL" },
+    { word: "VOLTEAR", hint: "Cambiar de opinión", category: "JERGA GENERAL" },
+    
+    // Objetos y herramientas
+    { word: "BATEA", hint: "Recipiente para lavar oro", category: "HERRAMIENTAS MINERAS" },
+    { word: "CANOA", hint: "Embarcación pequeña", category: "EMBARCACIONES" },
+    { word: "CHINCHORRO", hint: "Hamaca de pescar", category: "HERRAMIENTAS PESQUERAS" },
+    { word: "FOGÓN", hint: "Estufa de leña", category: "UTENSILIOS COCINA" },
+    { word: "MÚCURA", hint: "Tinaja de barro para agua", category: "UTENSILIOS COCINA" },
+    { word: "PETACA", hint: "Baúl de cuero", category: "MOBILIARIO TRADICIONAL" },
+    { word: "PILÓN", hint: "Mortero grande de madera", category: "UTENSILIOS COCINA" },
+    { word: "TABURETE", hint: "Asiento pequeño de madera", category: "MOBILIARIO TRADICIONAL" },
+    { word: "TINAJA", hint: "Vasija grande de barro", category: "UTENSILIOS COCINA" },
+    { word: "TOTUMA", hint: "Recipiente de calabaza", category: "UTENSILIOS TRADICIONALES" },
+    
+    // Lugares y geografía
+    { word: "CIÉNAGA", hint: "Lago poco profundo", category: "GEOGRAFIA COSTEÑA" },
+    { word: "CORDILLERA", hint: "Cadena de montañas", category: "GEOGRAFIA ANDINA" },
+    { word: "LLANO", hint: "Planicie extensa", category: "GEOGRAFIA LLANERA" },
+    { word: "MAGDALENA", hint: "Río principal de Colombia", category: "RIOS COLOMBIANOS" },
+    { word: "CAUCA", hint: "Río del occidente", category: "RIOS COLOMBIANOS" },
+    { word: "ORINOCO", hint: "Río de los llanos", category: "RIOS COLOMBIANOS" },
+    { word: "AMAZONAS", hint: "Río y selva del sur", category: "RIOS COLOMBIANOS" },
+    { word: "PÁRAMO", hint: "Ecosistema de alta montaña", category: "ECOSISTEMAS ANDINOS" },
+    { word: "SELVA", hint: "Bosque tropical húmedo", category: "ECOSISTEMAS COLOMBIANOS" },
+    { word: "SABANA", hint: "Llanura con pastos", category: "ECOSISTEMAS LLANEROS" },
+    
+    // Profesiones y oficios tradicionales
+    { word: "ALFARERO", hint: "Artesano del barro", category: "OFICIOS ARTESANALES" },
+    { word: "CERAMISTA", hint: "Artista de la cerámica", category: "OFICIOS ARTESANALES" },
+    { word: "GUAQUERO", hint: "Buscador de tesoros", category: "OFICIOS TRADICIONALES" },
+    { word: "LECHERO", hint: "Vendedor de leche", category: "OFICIOS URBANOS" },
+    { word: "PANADERO", hint: "Elaborador de pan", category: "OFICIOS URBANOS" },
+    { word: "PREGONERO", hint: "Vendedor ambulante", category: "OFICIOS URBANOS" },
+    { word: "SOBADOR", hint: "Curandero tradicional", category: "OFICIOS CURATIVOS" },
+    { word: "YERBATERO", hint: "Vendedor de hierbas medicinales", category: "OFICIOS CURATIVOS" },
+    { word: "ZAMBO", hint: "Músico de tambores", category: "OFICIOS MUSICALES" },
+    { word: "GAITERO", hint: "Músico de gaitas", category: "OFICIOS MUSICALES" }
+];
+
+// Agregar palabras adicionales al objeto principal
+colombianWordsDatabase.adicionales = palabrasAdicionales;
+
+// ===============================
+// EXPORTAR PARA USO EXTERNAL
+// ===============================
+
+// Para usar en Node.js
+if (typeof module !== 'undefined' && module.exports) {
+    module.exports = {
+        colombianWordsDatabase,
+        getAllWords,
+        getWordsByCategory,
+        getWordsByRegion,
+        getOnlyJergas,
+        getWordsByDifficulty,
+        getRandomWord,
+        searchByHint,
+        getDatabaseStats
+    };
+}
+
+// Para usar en navegador
+if (typeof window !== 'undefined') {
+    window.ColombianWords = {
+        database: colombianWordsDatabase,
+        getAllWords,
+        getWordsByCategory,
+        getWordsByRegion,
+        getOnlyJergas,
+        getWordsByDifficulty,
+        getRandomWord,
+        searchByHint,
+        getDatabaseStats
+    };
+}
+
+// ===============================
+// MOSTRAR RESUMEN EN CONSOLA
+// ===============================
+console.log("=== BASE DE DATOS DE PALABRAS COLOMBIANAS ===");
+console.log("📊 Estadísticas:");
+const stats = getDatabaseStats();
+console.log(`   • Total de palabras: ${stats.totalWords}`);
+console.log(`   • Categorías: ${stats.categoriesCount}`);
+console.log(`   • Por dificultad:`);
+console.log(`     - Fáciles (≤6 letras): ${stats.byDifficulty.easy.length}`);
+console.log(`     - Medianas (7-9 letras): ${stats.byDifficulty.medium.length}`);
+console.log(`     - Difíciles (≥10 letras): ${stats.byDifficulty.hard.length}`);
+console.log(`   • Solo jergas: ${getOnlyJergas().length}`);
+console.log("");
+console.log("🎯 Palabras por categoría:");
+Object.keys(stats.byCategory).forEach(cat => {
+    console.log(`   • ${cat}: ${stats.byCategory[cat]} palabras`);
+});
+console.log("");
+console.log("🗺️ Palabras por región:");
+Object.keys(stats.byRegion).forEach(region => {
+    console.log(`   • ${region}: ${stats.byRegion[region]} palabras`);
+});
+console.log("");
+console.log("🎲 Ejemplo de palabra aleatoria:");
+const randomWord = getRandomWord();
+console.log(`   "${randomWord.word}" - ${randomWord.hint} (${randomWord.category})`);
+console.log("");
+console.log("¡Listo para usar en Arepadle Pro! 🫓"); 
+De esta base de datos quiero que elimines la flora y la fauna,cultura y tradiciones y las palabras adicionales
