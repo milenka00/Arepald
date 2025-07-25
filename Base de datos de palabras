@@ -1,4 +1,4 @@
-// Base de datos de palabras por regiones y dificultad
+i// Base de datos de palabras por regiones y dificultad
         const wordDatabase = {
             easy: {
                 paisa: [
